@@ -5,4 +5,5 @@ public class HomeworkData {
 	public String name;
 	public String deadline;
 	public String information;
+	public String link;
 }
