@@ -31,7 +31,7 @@
 
 <body>
 
-<%
+	<%
 		HomeworkDBHelper homeworkDBHelper = new HomeworkDBHelper();
 		request.setCharacterEncoding("UTF-8");
 		String idString = request.getParameter("homework_id");
@@ -39,19 +39,20 @@
 		String name = request.getParameter("homework_name");
 		String deadline = request.getParameter("homework_deadline");
 		String information = request.getParameter("homework_information");
+		String link = request.getParameter("homework_link");
 		ArrayList<HomeworkData> homeworkDatas = homeworkDBHelper.getAllData();
 		if (id == 0) {
 			if (name != null) {
-				homeworkDBHelper.insertHomework(name, deadline, information);
-				response.sendRedirect("#");
+				homeworkDBHelper.insertHomework(name, deadline, information, link);
+				response.sendRedirect("#homeworks");
 			}
 		} else {
 			if (name != null) {
-				homeworkDBHelper.updateHomework(id, name, deadline, information);
+				homeworkDBHelper.updateHomework(id, name, deadline, information, link);
 			} else {
 				homeworkDBHelper.deleteHomework(id);
 			}
-			response.sendRedirect("#");
+			response.sendRedirect("#homeworks");
 		}
 	%>
 
@@ -69,12 +70,10 @@
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="#content">課程內容</a></li>
-					<li><a href="#organisations">Organisations</a></li>
-					<li><a href="#courses">Courses</a></li>
-					<li><a href="#pricing">Pricing</a></li>
+					<li><a href="#faculity-member">老師和助教的資訊</a></li>
+					<li><a href="#homeworks">作業</a></li>
 					<li><a href="#" data-target="#login" data-toggle="modal">Sign
 							in</a></li>
-					<li class="btn-trial"><a href="#footer">Free Trail</a></li>
 				</ul>
 			</div>
 		</div>
@@ -223,12 +222,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="header-section text-center">
-					<h2>Meet Our Faculty Member</h2>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-						Exercitationem nesciunt vitae,<br> maiores, magni dolorum
-						aliquam.
-					</p>
+					<h2>老師和助教的資訊</h2>
 					<hr class="bottom-line">
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-6">
@@ -244,7 +238,8 @@
 							<p class="pm-staff-profile-title">授課教師</p>
 							<p class="pm-staff-profile-bio">
 							<p>Office: Technology and Research Building 1732</p>
-							<p>Office Hours: Thu 10:10-12:00 and Fri 10:10-12:00, or by appointment</p>
+							<p>Office Hours: Thu 10:10-12:00 and Fri 10:10-12:00, or by
+								appointment</p>
 							<p>Email: killteacher@csie.ntut.edu.tw</p>
 							<p>Phone: 02-2771-2171 ext. 1732</p>
 						</div>
@@ -264,7 +259,8 @@
 
 							<p class="pm-staff-profile-bio">
 							<p>Office: Technology and Research Building 1321</p>
-							<p>Office Hours: Thu 10:10-12:00 and Fri 10:10-12:00, or by appointment</p>
+							<p>Office Hours: Thu 10:10-12:00 and Fri 10:10-12:00, or by
+								appointment</p>
 							<p>Email: ribbon@csie.ntut.edu.tw</p>
 							<p>Phone: 02-2771-2171 ext. 1321</p>
 						</div>
@@ -279,161 +275,51 @@
 		<div class="container">
 			<div class="row">
 				<div class="header-section text-center">
-					<h2>Homeworks</h2>
+					<h2>作業</h2>
 					<button class="btn btn-primary" id="button_add_homework"
-				onclick="addHomework()">新增作業</button>
-			<button class="btn btn-success" id="button_edit_homework"
-				onclick="editHomework()" disabled="disabled">編輯作業</button>
-			<button class="btn btn-danger" id="button_delete_homework"
-				onclick="deleteHomework()" disabled="disabled">刪除作業</button>
+						onclick="addHomework()">新增作業</button>
 					<hr class="bottom-line">
 				</div>
 			</div>
 		</div>
 		<div class="container">
-			<div class="row">
-				<div class="col-md-4 col-sm-4">
-					<div class="price-table">
-						<!-- Plan  -->
-						<div class="pricing-head">
-							<h4>Homework#1</h4>
-							<span class="fa fa-usd curency"></span> <span class="amount">200</span>
-						</div>
-
-						<!-- Plean Detail -->
-						<div class="price-in mart-15">
-							<a href="#" class="btn btn-bg green btn-block">PURCHACE</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4 col-sm-4">
-					<div class="price-table">
-						<!-- Plan  -->
-						<div class="pricing-head">
-							<h4>Quarterly Plan</h4>
-							<span class="fa fa-usd curency"></span> <span class="amount">800</span>
-						</div>
-
-						<!-- Plean Detail -->
-						<div class="price-in mart-15">
-							<a href="#" class="btn btn-bg yellow btn-block">PURCHACE</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4 col-sm-4">
-					<div class="price-table">
-						<!-- Plan  -->
-						<div class="pricing-head">
-							<h4>Year Plan</h4>
-							<span class="fa fa-usd curency"></span> <span class="amount">1200</span>
-						</div>
-
-						<!-- Plean Detail -->
-						<div class="price-in mart-15">
-							<a href="#" class="btn btn-bg red btn-block">PURCHACE</a>
-						</div>
-					</div>
-				</div>
-			</div>
+			<%
+				for (int i = 0; i < homeworkDatas.size(); i++) {
+					if (i % 3 == 0) {
+						out.println("<div class=\"row\">");
+					}
+					out.println("<div class=\"col-md-4 col-sm-4\">");
+					out.println("<div class=\"price-table\">");
+					out.println("<!-- Plan  -->");
+					out.println("<div class=\"pricing-head\">");
+					String viewArgs = "'" + homeworkDatas.get(i).name + "', '" + homeworkDatas.get(i).deadline + "', '"
+							+ homeworkDatas.get(i).information + "', '" + homeworkDatas.get(i).link + "'";
+					out.println("<a href=\"#homeworks\" id=\"button_view_homework\" onclick=\"viewHomework(" + viewArgs
+							+ ")\" ><h4>" + homeworkDatas.get(i).name + "</h4></a>");
+					out.println("<span>繳交期限<br>" + homeworkDatas.get(i).deadline + "</span>");
+					out.println("</div>");
+					out.println("<div class=\"price-in mart-15\">");
+					String editDeleteArgs = homeworkDatas.get(i).id + ", '" + homeworkDatas.get(i).name + "', '"
+							+ homeworkDatas.get(i).deadline + "', '" + homeworkDatas.get(i).information + "', '"
+							+ homeworkDatas.get(i).link + "'";
+					out.println("<button class=\"btn btn-success\" id=\"button_edit_homework\" onclick=\"editHomework("
+							+ editDeleteArgs + ")\">編輯</button>");
+					out.println("<button class=\"btn btn-danger\" id=\"button_delete_homework\" onclick=\"deleteHomework("
+							+ editDeleteArgs + ")\">刪除</button>");
+					out.println("</div>");
+					out.println("</div>");
+					out.println("</div>");
+					if ((i + 1) % 3 == 0) {
+						out.println("</div><br>");
+					}
+				}
+			%>
 		</div>
 	</section>
 	<!--/ Homework-->
-	<!--Contact-->
-	<section id="contact" class="section-padding">
-		<div class="container">
-			<div class="row">
-				<div class="header-section text-center">
-					<h2>Contact Us</h2>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-						Exercitationem nesciunt vitae,<br> maiores, magni dolorum
-						aliquam.
-					</p>
-					<hr class="bottom-line">
-				</div>
-				<div id="sendmessage">Your message has been sent. Thank you!</div>
-				<div id="errormessage"></div>
-				<form action="" method="post" role="form" class="contactForm">
-					<div class="col-md-6 col-sm-6 col-xs-12 left">
-						<div class="form-group">
-							<input type="text" name="name" class="form-control form"
-								id="name" placeholder="Your Name" data-rule="minlen:4"
-								data-msg="Please enter at least 4 chars" />
-							<div class="validation"></div>
-						</div>
-						<div class="form-group">
-							<input type="email" class="form-control" name="email" id="email"
-								placeholder="Your Email" data-rule="email"
-								data-msg="Please enter a valid email" />
-							<div class="validation"></div>
-						</div>
-						<div class="form-group">
-							<input type="text" class="form-control" name="subject"
-								id="subject" placeholder="Subject" data-rule="minlen:4"
-								data-msg="Please enter at least 8 chars of subject" />
-							<div class="validation"></div>
-						</div>
-					</div>
-
-					<div class="col-md-6 col-sm-6 col-xs-12 right">
-						<div class="form-group">
-							<textarea class="form-control" name="message" rows="5"
-								data-rule="required" data-msg="Please write something for us"
-								placeholder="Message"></textarea>
-							<div class="validation"></div>
-						</div>
-					</div>
-
-					<div class="col-xs-12">
-						<!-- Button -->
-						<button type="submit" id="submit" name="submit"
-							class="form contact-form-button light-form-button oswald light">SEND
-							EMAIL</button>
-					</div>
-				</form>
-
-			</div>
-		</div>
-	</section>
-	<!--/ Contact-->
 	<!--Footer-->
 	<footer id="footer" class="footer">
 		<div class="container text-center">
-
-			<h3>Start Your Free Trial Now!</h3>
-
-			<form class="mc-trial row">
-				<div class="form-group col-md-3 col-md-offset-2 col-sm-4">
-					<div class=" controls">
-						<input name="name" placeholder="Enter Your Name"
-							class="form-control" type="text">
-					</div>
-				</div>
-				<!-- End email input -->
-				<div class="form-group col-md-3 col-sm-4">
-					<div class=" controls">
-						<input name="EMAIL" placeholder="Enter Your email"
-							class="form-control" type="email">
-					</div>
-				</div>
-				<!-- End email input -->
-				<div class="col-md-2 col-sm-4">
-					<p>
-						<button name="submit" type="submit"
-							class="btn btn-block btn-submit">
-							Submit <i class="fa fa-arrow-right"></i>
-						</button>
-					</p>
-				</div>
-			</form>
-			<!-- End newsletter-form -->
-			<ul class="social-links">
-				<li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>
-				<li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
-				<li><a href="#link"><i class="fa fa-google-plus fa-fw"></i></a></li>
-				<li><a href="#link"><i class="fa fa-dribbble fa-fw"></i></a></li>
-				<li><a href="#link"><i class="fa fa-linkedin fa-fw"></i></a></li>
-			</ul>
 			©2016 Mentor Theme. All rights reserved
 			<div class="credits">
 				<!--
@@ -449,6 +335,9 @@
 	<!--/ Footer-->
 
 	<%@ include file="homeworkAddDialog.jsp"%>
+	<%@ include file="homeworkEditDialog.jsp"%>
+	<%@ include file="homeworkDeleteDialog.jsp"%>
+	<%@ include file="homeworkViewDialog.jsp"%>
 
 	<script src="js/jquery.min.js"></script>
 	<script src="js/jquery.easing.min.js"></script>
