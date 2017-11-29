@@ -4,6 +4,8 @@
 <!DOCTYPE html>
 <html>
 <%@ page import="java.util.ArrayList"%>
+<%@ page import="model.User"%>
+<%@ page import="model.UserDBHelper"%>
 <%@ page import="model.HomeworkData"%>
 <%@ page import="model.HomeworkDBHelper"%>
 <head>
@@ -32,27 +34,21 @@
 <body>
 
 	<%
+		UserDBHelper userDBHelper = new UserDBHelper();
 		HomeworkDBHelper homeworkDBHelper = new HomeworkDBHelper();
-		request.setCharacterEncoding("UTF-8");
-		String idString = request.getParameter("homework_id");
-		int id = idString == null || idString.equals("") ? 0 : Integer.parseInt(idString);
-		String name = request.getParameter("homework_name");
-		String deadline = request.getParameter("homework_deadline");
-		String information = request.getParameter("homework_information");
-		String link = request.getParameter("homework_link");
 		ArrayList<HomeworkData> homeworkDatas = homeworkDBHelper.getAllData();
-		if (id == 0) {
-			if (name != null) {
-				homeworkDBHelper.insertHomework(name, deadline, information, link);
-				response.sendRedirect("#homeworks");
-			}
+		request.setCharacterEncoding("UTF-8");
+		String userId = request.getParameter("userId");
+		String userRole = request.getParameter("useRole");
+		String userPassword = request.getParameter("userPassword");
+		if (userDBHelper.login(userId, userPassword)) {
+			session.setAttribute("userId", userId);
+			session.setAttribute("userRole", userRole);
+			response.sendRedirect("#");
 		} else {
-			if (name != null) {
-				homeworkDBHelper.updateHomework(id, name, deadline, information, link);
-			} else {
-				homeworkDBHelper.deleteHomework(id);
+			if (session.getAttribute("userId") == null) {
+				response.sendRedirect("login.jsp");
 			}
-			response.sendRedirect("#homeworks");
 		}
 	%>
 
@@ -72,69 +68,12 @@
 					<li><a href="#content">課程內容</a></li>
 					<li><a href="#faculity-member">老師和助教的資訊</a></li>
 					<li><a href="#homeworks">作業</a></li>
-					<li><a href="#" data-target="#login" data-toggle="modal">Sign
-							in</a></li>
+					<li><a href="logout.jsp">Sign Out</a></li>
 				</ul>
 			</div>
 		</div>
 	</nav>
 	<!--/ Navigation bar-->
-	<!--Modal box-->
-	<div class="modal fade" id="login" role="dialog">
-		<div class="modal-dialog modal-sm">
-
-			<!-- Modal content no 1-->
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title text-center form-title">Login</h4>
-				</div>
-				<div class="modal-body padtrbl">
-
-					<div class="login-box-body">
-						<p class="login-box-msg">Sign in to start your session</p>
-						<div class="form-group">
-							<form name="" id="loginForm">
-								<div class="form-group has-feedback">
-									<!----- username -------------->
-									<input class="form-control" placeholder="Username" id="loginid"
-										type="text" autocomplete="off" /> <span
-										style="display: none; font-weight: bold; position: absolute; color: red; position: absolute; padding: 4px; font-size: 11px; background-color: rgba(128, 128, 128, 0.26); z-index: 17; right: 27px; top: 5px;"
-										id="span_loginid"></span>
-									<!---Alredy exists  ! -->
-									<span class="glyphicon glyphicon-user form-control-feedback"></span>
-								</div>
-								<div class="form-group has-feedback">
-									<!----- password -------------->
-									<input class="form-control" placeholder="Password"
-										id="loginpsw" type="password" autocomplete="off" /> <span
-										style="display: none; font-weight: bold; position: absolute; color: grey; position: absolute; padding: 4px; font-size: 11px; background-color: rgba(128, 128, 128, 0.26); z-index: 17; right: 27px; top: 5px;"
-										id="span_loginpsw"></span>
-									<!---Alredy exists  ! -->
-									<span class="glyphicon glyphicon-lock form-control-feedback"></span>
-								</div>
-								<div class="row">
-									<div class="col-xs-12">
-										<div class="checkbox icheck">
-											<label> <input type="checkbox" id="loginrem">
-												Remember Me
-											</label>
-										</div>
-									</div>
-									<div class="col-xs-12">
-										<button type="button" class="btn btn-green btn-block btn-flat"
-											onclick="userlogin()">Sign In</button>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-
-		</div>
-	</div>
-	<!--/ Modal box-->
 	<!--Banner-->
 	<div class="banner">
 		<div class="bg-color">
@@ -306,6 +245,12 @@
 							+ editDeleteArgs + ")\">編輯</button>");
 					out.println("<button class=\"btn btn-danger\" id=\"button_delete_homework\" onclick=\"deleteHomework("
 							+ editDeleteArgs + ")\">刪除</button>");
+					out.println(
+							"<form role=\"form\" action=\"HomeworkFileDownloadServlet\" method=\"post\" enctype=\"multipart/form-data\">");
+					out.println("<input type=\"text\" class=\"form-control\" name = \"homework_id\" value = "
+							+ homeworkDatas.get(i).id + " readonly>");
+					out.println("<button type=\"submit\" class=\"btn btn-success btn-block\">下載</button>");
+					out.println("</form>");
 					out.println("</div>");
 					out.println("</div>");
 					out.println("</div>");
