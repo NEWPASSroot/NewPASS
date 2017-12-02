@@ -12,29 +12,30 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/HomeworkFileSubmitDownloadServlet")
+@WebServlet("/HomeworkFileDownloadServlet")
 @MultipartConfig(maxFileSize = 169999999)
-public class HomeworkDownloadServlet extends HttpServlet {
+public class AttachFileDownloadServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		SubmitHomeworkDBHelper submitHomeworkDBHelper = new SubmitHomeworkDBHelper();
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		HomeworkDBHelper homeworkDBHelper = new HomeworkDBHelper();
 		request.setCharacterEncoding("UTF-8");
 		String idString = request.getParameter("homework_id");
 		int id = idString == null || idString.equals("") ? 0 : Integer.parseInt(idString);
-		String homeworkFileName = submitHomeworkDBHelper.getHomeworkFileName(id);
-		Blob homeworkFile = submitHomeworkDBHelper.getAttachFile(id);
-		if (homeworkFile == null) {
+		String attachFileName = homeworkDBHelper.getAttachFileName(id);
+		Blob attachFile = homeworkDBHelper.getAttachFile(id);
+		if (attachFile == null) {
 			System.out.println("No File");
 			return;
 		}
 		InputStream inputStream = null;
 		try {
-			String contentType = this.getServletContext().getMimeType(homeworkFileName);
+			String contentType = this.getServletContext().getMimeType(attachFileName);
 			response.setHeader("Content-Type", contentType);
-			response.setHeader("Content-Length", String.valueOf(homeworkFile.length()));
-			response.setHeader("Content-Disposition", "inline; filename=\"" + homeworkFileName + "\"");
-			inputStream = homeworkFile.getBinaryStream();
+			response.setHeader("Content-Length", String.valueOf(attachFile.length()));
+			response.setHeader("Content-Disposition", "inline; filename=\"" + attachFileName + "\"");
+			inputStream = attachFile.getBinaryStream();
 			byte[] bytes = new byte[1024];
 			int bytesRead;
 			while ((bytesRead = inputStream.read(bytes)) != -1) {

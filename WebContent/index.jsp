@@ -33,16 +33,19 @@
 		UserDBHelper userDBHelper = new UserDBHelper();
 		request.setCharacterEncoding("UTF-8");
 		String userId = request.getParameter("userId");
-		String userRole = request.getParameter("useRole");
 		String userPassword = request.getParameter("userPassword");
-		if (userDBHelper.login(userId, userPassword)) {
-			session.setAttribute("userId", userId);
-			session.setAttribute("userRole", userRole);
-			response.sendRedirect("#");
-		} else {
-			if (session.getAttribute("userId") == null) {
+		if(session.getAttribute("userId")==null){
+			String userRole = userDBHelper.login(userId, userPassword);
+			if(userRole.equals("")){
 				response.sendRedirect("login.jsp");
+			}else{
+				session.setAttribute("userId", userId);
+				session.setAttribute("userRole", userRole);
+				response.sendRedirect("#"); //將傳過來的表單資料洗掉
 			}
+		}else{
+			response.setHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate");
+			response.setHeader("Pragma", "no-cache");
 		}
 	%>
 
@@ -119,7 +122,16 @@
 								Magnam atque, nostrum veniam consequatur libero fugiat,
 								similique quis.</p>
 						</figcaption>
-						<a href="python.jsp"></a>
+						<%
+							if(session.getAttribute("userRole")!=null){
+								String userRole = session.getAttribute("userRole").toString();
+								if(userRole.equals("student")){
+									out.println("<a href=\"python-student.jsp\"></a>");
+								}else{
+									out.println("<a href=\"python-teacher.jsp\"></a>");
+								}
+							}
+						%>
 					</figure>
 				</div>
 				<div class="col-md-4 col-sm-6 padleft-right">

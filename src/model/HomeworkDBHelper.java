@@ -92,13 +92,15 @@ public class HomeworkDBHelper {
 			ps.setBlob(6, attachFile);
 			ps.execute();
 		} catch (Exception e) {
-			System.out.println("Insert User Error: " + e);
+			System.out.println("Insert Homework Error: " + e);
 		}
 	}
 
-	public void updateHomework(int id, String name, String deadline, String information, String link) {
+	public void updateHomework(int id, String name, String deadline, String information, String link,
+			String attachFileName, InputStream attachFile) {
 		String sql = "Update " + TABLE_NAME + " Set " + COL_HOMEWORK_NAME + " = ?, " + COL_HOMEWORK_DEADLINE + " = ?, "
-				+ COL_HOMEWORK_INFORMATION + " = ?, " + COL_HOMEWORK_LINK + " = ? Where " + COL_HOMEWORK_ID + " = ?";
+				+ COL_HOMEWORK_INFORMATION + " = ?, " + COL_HOMEWORK_LINK + " = ?," + COL_HOMEWORK_ATTACH_FILE_NAME
+				+ " = ?, " + COL_HOMEWORK_ATTACH_FILE + " = ? Where " + COL_HOMEWORK_ID + " = ?";
 		try {
 			DatabaseConnector databaseConnector = new DatabaseConnector();
 			PreparedStatement ps = databaseConnector.connection.prepareStatement(sql);
@@ -106,10 +108,12 @@ public class HomeworkDBHelper {
 			ps.setString(2, deadline);
 			ps.setString(3, information);
 			ps.setString(4, link);
-			ps.setInt(5, id);
+			ps.setString(5, attachFileName);
+			ps.setBlob(6, attachFile);
+			ps.setInt(7, id);
 			ps.executeUpdate();
 		} catch (Exception ex) {
-			System.out.println(ex);
+			System.out.println("Update Homework Error: " + ex);
 		}
 
 	}
@@ -119,7 +123,7 @@ public class HomeworkDBHelper {
 		try {
 			dbConnector.statement.executeUpdate(sql);
 		} catch (Exception ex) {
-			System.out.println("Delete User Error: " + ex);
+			System.out.println("Delete Homework Error: " + ex);
 		}
 	}
 

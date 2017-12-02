@@ -8,6 +8,8 @@
 <%@ page import="model.UserDBHelper"%>
 <%@ page import="model.HomeworkData"%>
 <%@ page import="model.HomeworkDBHelper"%>
+<%@ page import="model.SubmitHomeworkData" %>
+<%@ page import="model.SubmitHomeworkDBHelper" %>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -34,22 +36,19 @@
 <body>
 
 	<%
-		UserDBHelper userDBHelper = new UserDBHelper();
+		String userId = "", userRole = "";
+		if (session.getAttribute("userId") == null) {
+			response.sendRedirect("login.jsp");
+		} else {
+			response.setHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate");
+			response.setHeader("Pragma", "no-cache");
+			userId = session.getAttribute("userId").toString();
+			userRole = session.getAttribute("userRole").toString();
+		}
 		HomeworkDBHelper homeworkDBHelper = new HomeworkDBHelper();
+		SubmitHomeworkDBHelper submitHomeworkDBHelper = new SubmitHomeworkDBHelper();
 		ArrayList<HomeworkData> homeworkDatas = homeworkDBHelper.getAllData();
 		request.setCharacterEncoding("UTF-8");
-		String userId = request.getParameter("userId");
-		String userRole = request.getParameter("useRole");
-		String userPassword = request.getParameter("userPassword");
-		if (userDBHelper.login(userId, userPassword)) {
-			session.setAttribute("userId", userId);
-			session.setAttribute("userRole", userRole);
-			response.sendRedirect("#");
-		} else {
-			if (session.getAttribute("userId") == null) {
-				response.sendRedirect("login.jsp");
-			}
-		}
 	%>
 
 	<!--Navigation bar-->
@@ -223,41 +222,76 @@
 		</div>
 		<div class="container">
 			<%
+				/*For Loop*/
 				for (int i = 0; i < homeworkDatas.size(); i++) {
+					/*IF*/
 					if (i % 3 == 0) {
-						out.println("<div class=\"row\">");
+			%>
+			<div class="row">
+				<%
 					}
-					out.println("<div class=\"col-md-4 col-sm-4\">");
-					out.println("<div class=\"price-table\">");
-					out.println("<!-- Plan  -->");
-					out.println("<div class=\"pricing-head\">");
-					String viewArgs = "'" + homeworkDatas.get(i).name + "', '" + homeworkDatas.get(i).deadline + "', '"
-							+ homeworkDatas.get(i).information + "', '" + homeworkDatas.get(i).link + "'";
-					out.println("<a href=\"#homeworks\" id=\"button_view_homework\" onclick=\"viewHomework(" + viewArgs
-							+ ")\" ><h4>" + homeworkDatas.get(i).name + "</h4></a>");
-					out.println("<span>繳交期限<br>" + homeworkDatas.get(i).deadline + "</span>");
-					out.println("</div>");
-					out.println("<div class=\"price-in mart-15\">");
-					String editDeleteArgs = homeworkDatas.get(i).id + ", '" + homeworkDatas.get(i).name + "', '"
-							+ homeworkDatas.get(i).deadline + "', '" + homeworkDatas.get(i).information + "', '"
-							+ homeworkDatas.get(i).link + "'";
-					out.println("<button class=\"btn btn-success\" id=\"button_edit_homework\" onclick=\"editHomework("
-							+ editDeleteArgs + ")\">編輯</button>");
-					out.println("<button class=\"btn btn-danger\" id=\"button_delete_homework\" onclick=\"deleteHomework("
-							+ editDeleteArgs + ")\">刪除</button>");
-					out.println(
-							"<form role=\"form\" action=\"HomeworkFileDownloadServlet\" method=\"post\" enctype=\"multipart/form-data\">");
-					out.println("<input type=\"text\" class=\"form-control\" name = \"homework_id\" value = "
-							+ homeworkDatas.get(i).id + " readonly>");
-					out.println("<button type=\"submit\" class=\"btn btn-success btn-block\">下載</button>");
-					out.println("</form>");
-					out.println("</div>");
-					out.println("</div>");
-					out.println("</div>");
-					if ((i + 1) % 3 == 0) {
-						out.println("</div><br>");
-					}
+						/*IF*/
+				%>
+				<div class="col-md-4 col-sm-4">
+					<div class="price-table">
+						<!-- Plan  -->
+						<div class="pricing-head">
+							<%
+								String viewArgs = "'" + homeworkDatas.get(i).id + "', '" + homeworkDatas.get(i).name + "', '"
+											+ homeworkDatas.get(i).deadline + "', '" + homeworkDatas.get(i).information + "', '"
+											+ homeworkDatas.get(i).link + "', '" + homeworkDatas.get(i).attach_file_name + "'";
+							%>
+							<a href="#homeworks" id="button_view_homework"
+								onclick="viewHomework(  <%out.print(viewArgs);%>)"> <%
+ 	out.print(homeworkDatas.get(i).name);
+ %>
+							</a> <br> <span>繳交期限<br> <%
+ 	out.print(homeworkDatas.get(i).deadline);
+ %>
+							</span>
+							<form role="form" action="HomeworkFileSubmitDownloadServlet"
+									method="post" enctype="multipart/form-data">
+									<%
+										int homeworkId=submitHomeworkDBHelper.getHomeworkFileId(homeworkDatas.get(i).id, userId);
+										String homeworkFileName = submitHomeworkDBHelper.getHomeworkFileName(homeworkId);
+									%>
+									<input type="hidden" name="homework_id" value=<%out.print(homeworkId); %>>
+									<button type="submit" class="btn btn-default"><%out.print(homeworkFileName); %></button>
+									</form>
+						</div>
+						<div class="price-in mart-15">
+							<%
+								String editDeleteArgs = homeworkDatas.get(i).id + ", '" + homeworkDatas.get(i).name + "', '"
+											+ homeworkDatas.get(i).deadline + "', '" + homeworkDatas.get(i).information + "', '"
+											+ homeworkDatas.get(i).link + "'";
+							%>
+							<form role="form" action="HomeworkFileSubmitUploadServlet"
+								method="post" enctype="multipart/form-data">
+								<input type="hidden" name="teacher_assignment_id"
+									value=<%out.print(homeworkDatas.get(i).id);%>> <input
+									type="hidden" name="student_id" value=<%out.print(userId);%>>
+								<input type="file" name="homework_file">
+								<button type="submit" class="btn btn-success">上傳</button>
+								<button class="btn btn-info" id="button_delete_homework"
+									onclick="deleteHomework(<%out.print(editDeleteArgs);%>)">查看</button>
+
+							</form>
+
+						</div>
+
+					</div>
+				</div>
+				<%
+					/*IF*/
+						if ((i + 1) % 3 == 0) {
+				%>
+			</div>
+			<br>
+			<%
 				}
+					/*IF*/
+				}
+				/*For Loop*/
 			%>
 		</div>
 	</section>

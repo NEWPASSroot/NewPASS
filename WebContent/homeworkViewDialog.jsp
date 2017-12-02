@@ -36,6 +36,7 @@
 						<p id="view_homework_information"></p>
 					</div>
 					<div class="container-fluid" id="view_homework_link"></div>
+					<div class="container-fluid" id="view_homework_attach_file"></div>
 					<br>
 					<button type="submit" class="btn btn-danger btn-block"
 						data-dismiss="modal">關閉</button>

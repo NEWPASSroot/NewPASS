@@ -2,52 +2,50 @@ package model;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-/**
- * Servlet implementation class HomeworkUploadServlet
- */
-@WebServlet("/HomeworkFileUploadServlet")
+@WebServlet("/HomeworkFileSubmitUploadServlet")
 @MultipartConfig(maxFileSize = 169999999)
 public class HomeworkUploadServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		HomeworkDBHelper homeworkDBHelper = new HomeworkDBHelper();
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		SubmitHomeworkDBHelper submitHomeworkDBHelper = new SubmitHomeworkDBHelper();
 		request.setCharacterEncoding("UTF-8");
 		String idString = request.getParameter("homework_id");
 		int id = idString == null || idString.equals("") ? 0 : Integer.parseInt(idString);
-		String name = request.getParameter("homework_name");
-		String deadline = request.getParameter("homework_deadline");
-		String information = request.getParameter("homework_information");
-		String link = request.getParameter("homework_link");
-		Part attachFile = request.getPart("homework_attach_file");
-		String attachFileName = "";
+		String teacherAssignmentIdString = request.getParameter("teacher_assignment_id");
+		int teacherAssignmentId = Integer.parseInt(teacherAssignmentIdString);
+		String studentId = request.getParameter("student_id");
+		String submitDatetime = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(Calendar.getInstance().getTime());
+		Part homeworkFile = request.getPart("homework_file");
+		String homeworkFileName = "";
 		InputStream inputStream = null;
-		if (attachFile != null) {
-			attachFileName = attachFile.getSubmittedFileName();
-			inputStream = attachFile.getInputStream();
+		if (homeworkFile != null) {
+			homeworkFileName = homeworkFile.getSubmittedFileName();
+			inputStream = homeworkFile.getInputStream();
 		}
 		if (id == 0) {
-			if (name != null) {
-				homeworkDBHelper.insertHomework(name, deadline, information, link, attachFileName, inputStream);
+			if (studentId != null) {
+				submitHomeworkDBHelper.insertHomework(teacherAssignmentId, studentId, 0, submitDatetime, homeworkFileName, inputStream);
 			}
 		} else {
-			if (name != null) {
-				homeworkDBHelper.updateHomework(id, name, deadline, information, link);
+			if (studentId != null) {
+				//submitHomeworkDBHelper.updateHomework(id, name, deadline, information, link, attachFileName, inputStream);
 			} else {
-				homeworkDBHelper.deleteHomework(id);
+				submitHomeworkDBHelper.deleteHomework(id);
 			}
 		}
-		response.sendRedirect("/NewPASS/python.jsp#homeworks");
+		response.sendRedirect("/NewPASS/python-student.jsp#homeworks");
 	}
 
 }

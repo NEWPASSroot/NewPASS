@@ -23,7 +23,7 @@
 					</button>
 				</div>
 				<div class="modal-body" style="pdeleteing: 40px 50px;">
-					<form role="form" action="python.jsp" method="post">
+					<form role="form" action="HomeworkFileUploadServlet" method="post" enctype="multipart/form-data">
 						<div class="form-group">
 							<label for="delete_homework_id"> 作業Id</label> <input type="text"
 								class="form-control" id="delete_homework_id" name="homework_id"
@@ -48,6 +48,11 @@
 							<label for="delete_homework_link"> 附件連結</label>
 							<textarea class="form-control" id="delete_homework_link"
 								name="homework_link" disabled></textarea>
+						</div>
+						<div class="form-group">
+							<label for="delete_homework_attach_file"> 附件</label> <input
+								type="text" class="form-control" id="delete_homework_attach_file"
+								name="homework_attach_file" disabled>
 						</div>
 						<button type="submit" class="btn btn-success btn-block">
 							刪除</button>
