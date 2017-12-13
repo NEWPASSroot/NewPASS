@@ -51,6 +51,11 @@
 								type="file" class="form-control" id="add_homework_attach_file"
 								name="homework_attach_file">
 						</div>
+						<div class="form-group">
+							<label for="add_homework_UT"> UT</label> <input
+								type="file" class="form-control" id="add_homework_UT"
+								name="homework_UT">
+						</div>
 						<button type="submit" class="btn btn-success btn-block">
 							新增</button>
 						<button type="submit" class="btn btn-danger btn-block"

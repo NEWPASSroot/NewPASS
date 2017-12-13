@@ -35,6 +35,10 @@
 						<label for="view_homework_information" style="color: #3399FF">作業描述</label>
 						<p id="view_homework_information"></p>
 					</div>
+					<div class="container-fluid">
+						<label for="view_homework_information" style="color: #3399FF">分數</label>
+						<p>80</p>
+					</div>
 					<div class="container-fluid" id="view_homework_link"></div>
 					<div class="container-fluid" id="view_homework_attach_file"></div>
 					<br>

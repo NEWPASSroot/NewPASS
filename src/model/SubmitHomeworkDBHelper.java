@@ -92,40 +92,34 @@ public class SubmitHomeworkDBHelper {
 		return attachFile;
 	}
 
-	public void insertHomework(int teacherAssignmentId, String studentId, int score, String submitDatetime,
+	public void insertHomework(int teacherAssignmentId, String studentId, String submitDatetime,
 			String homeworkFileName, InputStream homeworkFile) {
 		String sql = "Insert Into " + TABLE_NAME + " (" + COL_TEACHER_ASSIGNMENT_ID + ", " + COL_STUDENT_ID + ", "
-				+ COL_SCORE + ", " + COL_SUBMIT_DATETIME + ", " + COL_HOMEWORK_FILE_NAME + ", " + COL_HOMEWORK_FILE
-				+ ") Value ( ?, ?, ?, ?, ?, ?)";
+				+ COL_SUBMIT_DATETIME + ", " + COL_HOMEWORK_FILE_NAME + ", " + COL_HOMEWORK_FILE
+				+ ") Value ( ?, ?, ?, ?, ?)";
 		try {
 			PreparedStatement ps = dbConnector.connection.prepareStatement(sql);
 			ps.setInt(1, teacherAssignmentId);
 			ps.setString(2, studentId);
-			ps.setInt(3, score);
-			ps.setString(4, submitDatetime);
-			ps.setString(5, homeworkFileName);
-			ps.setBlob(6, homeworkFile);
+			ps.setString(3, submitDatetime);
+			ps.setString(4, homeworkFileName);
+			ps.setBlob(5, homeworkFile);
 			ps.execute();
 		} catch (Exception e) {
 			System.out.println("Insert Submitted Homework Error: " + e);
 		}
 	}
 
-	public void updateHomework(int id, int teacherAssignmentId, String studentId, int score, String submitDatetime,
-			String homeworkFileName, InputStream homeworkFile) {
-		String sql = "Update " + TABLE_NAME + " Set " + COL_TEACHER_ASSIGNMENT_ID + " = ?, " + COL_STUDENT_ID + " = ?, "
-				+ COL_SCORE + " = ?, " + COL_SUBMIT_DATETIME + " = ?," + COL_HOMEWORK_FILE_NAME + " = ?, "
-				+ COL_HOMEWORK_FILE + " = ? Where " + COL_ID + " = ?";
+	public void updateHomework(int id, String submitDatetime, String homeworkFileName, InputStream homeworkFile) {
+		String sql = "Update " + TABLE_NAME + " Set " + COL_SUBMIT_DATETIME + " = ?," + COL_HOMEWORK_FILE_NAME
+				+ " = ?, " + COL_HOMEWORK_FILE + " = ? Where " + COL_ID + " = ?";
 		try {
 			DatabaseConnector databaseConnector = new DatabaseConnector();
 			PreparedStatement ps = databaseConnector.connection.prepareStatement(sql);
-			ps.setInt(1, teacherAssignmentId);
-			ps.setString(2, studentId);
-			ps.setInt(3, score);
-			ps.setString(4, submitDatetime);
-			ps.setString(5, homeworkFileName);
-			ps.setBlob(6, homeworkFile);
-			ps.setInt(7, id);
+			ps.setString(1, submitDatetime);
+			ps.setString(2, homeworkFileName);
+			ps.setBlob(3, homeworkFile);
+			ps.setInt(4, id);
 			ps.executeUpdate();
 		} catch (Exception ex) {
 			System.out.println("Update Submitted Homework " + ex);

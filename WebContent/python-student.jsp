@@ -8,8 +8,8 @@
 <%@ page import="model.UserDBHelper"%>
 <%@ page import="model.HomeworkData"%>
 <%@ page import="model.HomeworkDBHelper"%>
-<%@ page import="model.SubmitHomeworkData" %>
-<%@ page import="model.SubmitHomeworkDBHelper" %>
+<%@ page import="model.SubmitHomeworkData"%>
+<%@ page import="model.SubmitHomeworkDBHelper"%>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,6 +25,69 @@
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="css/imagehover.min.css">
 <link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript"
+	src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+
+      // Load the Visualization API and the piechart package.
+      google.load('visualization', '1.0', {'packages':['corechart', 'bar']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawChart);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+        // Create the data table.  ******原始資料******
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows([
+          ['通過測試', 3],
+          ['未繳交', 1],
+          ['未通過測試', 2]
+        ]);
+        
+        
+        var data3 = new google.visualization.arrayToDataTable([
+        	['Score', 'Number of people'],
+        	['0-9', 1],
+            ['10-19', 0],
+            ['20-29',  0],
+            ['30-39', 0],
+            ['40-49', 0],
+            ['50-59', 8],
+            ['60-69', 16],
+            ['70-79', 24],
+            ['80-89', 26],
+            ['90-99', 4],
+            ['100', 10]
+             ]);
+
+
+        // *********************差異之處*************************
+        // Set chart options
+        var options = {'title':'繳交狀態',
+                       'width':1200,
+                       'height':900};
+        
+        var options3 = {'title':'Line chart',
+                'width':800,
+                'height':600};
+
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        var chart3 = new google.charts.Bar(document.getElementById('chart_div3'));
+        
+        chart.draw(data, options);
+        chart3.draw(data3, options3);
+      }
+    </script>
 <!-- =======================================================
     Theme Name: Mentor
     Theme URL: https://bootstrapmade.com/mentor-free-education-bootstrap-theme/
@@ -214,8 +277,6 @@
 			<div class="row">
 				<div class="header-section text-center">
 					<h2>作業</h2>
-					<button class="btn btn-primary" id="button_add_homework"
-						onclick="addHomework()">新增作業</button>
 					<hr class="bottom-line">
 				</div>
 			</div>
@@ -250,14 +311,19 @@
  %>
 							</span>
 							<form role="form" action="HomeworkFileSubmitDownloadServlet"
-									method="post" enctype="multipart/form-data">
-									<%
-										int homeworkId=submitHomeworkDBHelper.getHomeworkFileId(homeworkDatas.get(i).id, userId);
+								method="post" enctype="multipart/form-data">
+								<%
+									int homeworkId = submitHomeworkDBHelper.getHomeworkFileId(homeworkDatas.get(i).id, userId);
 										String homeworkFileName = submitHomeworkDBHelper.getHomeworkFileName(homeworkId);
+								%>
+								<input type="hidden" name="homework_id"
+									value=<%out.print(homeworkId);%>>
+								<button type="submit" class="btn btn-default">
+									<%
+										out.print(homeworkFileName);
 									%>
-									<input type="hidden" name="homework_id" value=<%out.print(homeworkId); %>>
-									<button type="submit" class="btn btn-default"><%out.print(homeworkFileName); %></button>
-									</form>
+								</button>
+							</form>
 						</div>
 						<div class="price-in mart-15">
 							<%
@@ -296,6 +362,12 @@
 		</div>
 	</section>
 	<!--/ Homework-->
+
+	<!--Pie Chart-->
+	<div id="chart_div"></div>
+	<div id="chart_div3"></div>
+	<!--/ Pie Chart-->
+
 	<!--Footer-->
 	<footer id="footer" class="footer">
 		<div class="container text-center">
