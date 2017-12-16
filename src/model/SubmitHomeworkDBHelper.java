@@ -76,6 +76,57 @@ public class SubmitHomeworkDBHelper {
 		return fileName;
 	}
 
+	public String getHomeworkFileName(int assignmentId, String studentId) {
+		String fileName = null;
+		ResultSet resultSet;
+		try {
+			String sql = "Select " + COL_HOMEWORK_FILE_NAME + " From " + TABLE_NAME + " Where "
+					+ COL_TEACHER_ASSIGNMENT_ID + " = " + assignmentId + " And " + COL_STUDENT_ID + " = " + studentId;
+			resultSet = dbConnector.statement.executeQuery(sql);
+			if (resultSet.next()) {
+				fileName = resultSet.getString(COL_HOMEWORK_FILE_NAME);
+			}
+			System.out.println("Finish getting file name of homeworks with assignmentId and studentId");
+		} catch (Exception e) {
+			System.out.println("Can not get file name of our homeworks with assignmentId and studentId: " + e);
+		}
+		return fileName;
+	}
+
+	public String getSubmitHomeworkTime(int assignmentId, String studentId) {
+		String sql = "Select " + COL_SUBMIT_DATETIME + " From " + TABLE_NAME + " Where " + COL_TEACHER_ASSIGNMENT_ID
+				+ " = " + assignmentId + " And " + COL_STUDENT_ID + " = " + studentId;
+		String submitTime = "";
+		ResultSet resultSet;
+		try {
+			resultSet = dbConnector.statement.executeQuery(sql);
+			if (resultSet.next()) {
+				submitTime = resultSet.getString(COL_SUBMIT_DATETIME);
+			}
+			System.out.println("Finish getting the submit status of homeworks");
+		} catch (Exception e) {
+			System.out.println("Can not get the submit status of homeworks: " + e);
+		}
+		return submitTime;
+	}
+
+	public int getScore(int assignmentId, String studentId) {
+		String sql = "Select " + COL_SCORE + " From " + TABLE_NAME + " Where " + COL_TEACHER_ASSIGNMENT_ID + " = "
+				+ assignmentId + " And " + COL_STUDENT_ID + " = " + studentId;
+		int score = 0;
+		ResultSet resultSet;
+		try {
+			resultSet = dbConnector.statement.executeQuery(sql);
+			if (resultSet.next()) {
+				score = resultSet.getInt(COL_SCORE);
+			}
+			System.out.println("Finish getting the score of a homework");
+		} catch (Exception e) {
+			System.out.println("Can not get the score of a homework: " + e);
+		}
+		return score;
+	}
+
 	public Blob getAttachFile(int id) {
 		Blob attachFile = null;
 		ResultSet resultSet;

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 public class UserDBHelper {
 
-	public ResultSet resultSet;
 	private String TABLE_NAME = "user";
 	private String COL_ID = "id";
 	private String COL_USER_ID = "user_id";
@@ -17,10 +16,10 @@ public class UserDBHelper {
 	private DatabaseConnector dbConnector = new DatabaseConnector();
 
 	public ArrayList<User> getAllData() {
+		String sql = "Select * From " + TABLE_NAME;
 		ArrayList<User> result = new ArrayList<User>();
 		ResultSet resultSet;
 		try {
-			String sql = "Select * From " + TABLE_NAME;
 			resultSet = dbConnector.statement.executeQuery(sql);
 			while (resultSet.next()) {
 				User user = new User();
@@ -125,6 +124,29 @@ public class UserDBHelper {
 			System.out.println("Can not get personal information: " + e);
 		}
 		return user ;
+	}
+	
+	public ArrayList<User> getAllStudents() {
+		String sql = "Select * From " + TABLE_NAME + " Where " + COL_USER_ROLE + " = 'student' ";
+		ResultSet resultSet;
+		ArrayList<User> result = new ArrayList<User>();
+		try {
+			resultSet = dbConnector.statement.executeQuery(sql);
+			while (resultSet.next()) {
+				User user = new User();
+				user.id = resultSet.getInt(COL_ID);
+				user.userId = resultSet.getString(COL_USER_ID);
+				user.name = resultSet.getString(COL_USER_NAME);
+				user.password = resultSet.getString(COL_USER_PASSWORD);
+				user.role = resultSet.getString(COL_USER_ROLE);
+				user.email = resultSet.getString(COL_USER_EMAIL);
+				result.add(user);
+			}
+			System.out.println("Finish getting all data of users");
+		} catch (Exception e) {
+			System.out.println("Can not get all data of users: " + e);
+		}
+		return result;
 	}
 	
 	public void editEmail(String userId, String userEmail) {

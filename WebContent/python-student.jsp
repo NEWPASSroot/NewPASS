@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <%@ page import="java.util.ArrayList"%>
+<%@ page import="java.text.SimpleDateFormat"%>
 <%@ page import="model.User"%>
 <%@ page import="model.UserDBHelper"%>
 <%@ page import="model.HomeworkData"%>
@@ -25,69 +26,6 @@
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="css/imagehover.min.css">
 <link rel="stylesheet" type="text/css" href="css/style.css">
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script type="text/javascript"
-	src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-
-      // Load the Visualization API and the piechart package.
-      google.load('visualization', '1.0', {'packages':['corechart', 'bar']});
-
-      // Set a callback to run when the Google Visualization API is loaded.
-      google.setOnLoadCallback(drawChart);
-
-      // Callback that creates and populates a data table,
-      // instantiates the pie chart, passes in the data and
-      // draws it.
-      function drawChart() {
-
-        // Create the data table.  ******原始資料******
-
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Topping');
-        data.addColumn('number', 'Slices');
-        data.addRows([
-          ['通過測試', 3],
-          ['未繳交', 1],
-          ['未通過測試', 2]
-        ]);
-        
-        
-        var data3 = new google.visualization.arrayToDataTable([
-        	['Score', 'Number of people'],
-        	['0-9', 1],
-            ['10-19', 0],
-            ['20-29',  0],
-            ['30-39', 0],
-            ['40-49', 0],
-            ['50-59', 8],
-            ['60-69', 16],
-            ['70-79', 24],
-            ['80-89', 26],
-            ['90-99', 4],
-            ['100', 10]
-             ]);
-
-
-        // *********************差異之處*************************
-        // Set chart options
-        var options = {'title':'繳交狀態',
-                       'width':1200,
-                       'height':900};
-        
-        var options3 = {'title':'Line chart',
-                'width':800,
-                'height':600};
-
-
-        // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-        var chart3 = new google.charts.Bar(document.getElementById('chart_div3'));
-        
-        chart.draw(data, options);
-        chart3.draw(data3, options3);
-      }
-    </script>
 <!-- =======================================================
     Theme Name: Mentor
     Theme URL: https://bootstrapmade.com/mentor-free-education-bootstrap-theme/
@@ -304,11 +242,25 @@
 							%>
 							<a href="#homeworks" id="button_view_homework"
 								onclick="viewHomework(  <%out.print(viewArgs);%>)"> <%
- 	out.print(homeworkDatas.get(i).name);
- %>
+								String homeworkName = homeworkDatas.get(i).name;
+ 							out.print(homeworkName);
+							%>
 							</a> <br> <span>繳交期限<br> <%
- 	out.print(homeworkDatas.get(i).deadline);
- %>
+							String deadline = homeworkDatas.get(i).deadline;
+							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+							long nowTime = System.currentTimeMillis();
+							long deadlineTime= sdf.parse(deadline).getTime();
+							if(nowTime>deadlineTime){
+								%>
+								<font color="red">
+								<%out.print(deadline);%>
+								</font>
+							<%
+								
+							}else{
+								out.print(deadline);
+							}
+							%>
 							</span>
 							<form role="form" action="HomeworkFileSubmitDownloadServlet"
 								method="post" enctype="multipart/form-data">
@@ -330,6 +282,16 @@
 								String editDeleteArgs = homeworkDatas.get(i).id + ", '" + homeworkDatas.get(i).name + "', '"
 											+ homeworkDatas.get(i).deadline + "', '" + homeworkDatas.get(i).information + "', '"
 											+ homeworkDatas.get(i).link + "'";
+								if(nowTime>deadlineTime)
+								{
+							%>
+									<div class="btn btn-danger btn-block">
+										期限已過
+									</div>
+							<%
+								}
+								else
+								{
 							%>
 							<form role="form" action="HomeworkFileSubmitUploadServlet"
 								method="post" enctype="multipart/form-data">
@@ -337,12 +299,16 @@
 									value=<%out.print(homeworkDatas.get(i).id);%>> <input
 									type="hidden" name="student_id" value=<%out.print(userId);%>>
 								<input type="file" name="homework_file">
-								<button type="submit" class="btn btn-success">上傳</button>
-								<button class="btn btn-info" id="button_delete_homework"
-									onclick="deleteHomework(<%out.print(editDeleteArgs);%>)">查看</button>
-
+								<button type="submit" class="btn btn-success btn-block">上傳</button>
 							</form>
-
+							<%
+								}
+							%>
+							<form role="form" action="viewSubmitStatus.jsp" method="post">
+								<input type="hidden" name="teacher_assignment_id"
+									value=<%out.print(homeworkDatas.get(i).id);%>>
+								<button type="submit" class="btn btn-info btn-block">查看</button>
+							</form>
 						</div>
 
 					</div>
@@ -362,11 +328,6 @@
 		</div>
 	</section>
 	<!--/ Homework-->
-
-	<!--Pie Chart-->
-	<div id="chart_div"></div>
-	<div id="chart_div3"></div>
-	<!--/ Pie Chart-->
 
 	<!--Footer-->
 	<footer id="footer" class="footer">
@@ -390,12 +351,14 @@
 	<%@ include file="homeworkDeleteDialog.jsp"%>
 	<%@ include file="homeworkViewDialog.jsp"%>
 
-	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery.min.js">
+</script>
 	<script src="js/jquery.easing.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/custom.js"></script>
 	<script src="contactform/contactform.js"></script>
 	<script src="homeworkEvent.js"></script>
+
 
 </body>
 

@@ -20,10 +20,10 @@ public class HomeworkDBHelper {
 	private DatabaseConnector dbConnector = new DatabaseConnector();
 
 	public ArrayList<HomeworkData> getAllData() {
+		String sql = "Select * From " + TABLE_NAME;
 		ArrayList<HomeworkData> result = new ArrayList<HomeworkData>();
 		ResultSet resultSet;
 		try {
-			String sql = "Select * From " + TABLE_NAME;
 			resultSet = dbConnector.statement.executeQuery(sql);
 			while (resultSet.next()) {
 				HomeworkData homeworkData = new HomeworkData();
@@ -44,11 +44,11 @@ public class HomeworkDBHelper {
 	}
 
 	public String getAttachFileName(int id) {
-		String fileName = null;
+		String sql = "Select " + COL_HOMEWORK_ATTACH_FILE_NAME + " From " + TABLE_NAME + " Where " + COL_HOMEWORK_ID
+				+ " = " + id;
+		String fileName = "";
 		ResultSet resultSet;
 		try {
-			String sql = "Select " + COL_HOMEWORK_ATTACH_FILE_NAME + " From " + TABLE_NAME + " Where " + COL_HOMEWORK_ID
-					+ " = " + id;
 			resultSet = dbConnector.statement.executeQuery(sql);
 			if (resultSet.next()) {
 				fileName = resultSet.getString(COL_HOMEWORK_ATTACH_FILE_NAME);
@@ -61,11 +61,11 @@ public class HomeworkDBHelper {
 	}
 
 	public Blob getAttachFile(int id) {
+		String sql = "Select " + COL_HOMEWORK_ATTACH_FILE + " From " + TABLE_NAME + " Where " + COL_HOMEWORK_ID + " = "
+				+ id;
 		Blob attachFile = null;
 		ResultSet resultSet;
 		try {
-			String sql = "Select " + COL_HOMEWORK_ATTACH_FILE + " From " + TABLE_NAME + " Where " + COL_HOMEWORK_ID
-					+ " = " + id;
 			resultSet = dbConnector.statement.executeQuery(sql);
 			if (resultSet.next()) {
 				attachFile = resultSet.getBlob(COL_HOMEWORK_ATTACH_FILE);
@@ -75,6 +75,22 @@ public class HomeworkDBHelper {
 			System.out.println("Can not get the attach file of our homeworks: " + e);
 		}
 		return attachFile;
+	}
+
+	public String getHomeworkName(int id) {
+		String sql = "Select " + COL_HOMEWORK_NAME + " From " + TABLE_NAME + " Where " + COL_HOMEWORK_ID + " = " + id;
+		String homeworkName = "";
+		ResultSet resultSet;
+		try {
+			resultSet = dbConnector.statement.executeQuery(sql);
+			if (resultSet.next()) {
+				homeworkName = resultSet.getString(COL_HOMEWORK_NAME);
+			}
+			System.out.println("Finish getting the name of homework");
+		} catch (Exception e) {
+			System.out.println("Can not get the name of our homework: " + e);
+		}
+		return homeworkName;
 	}
 
 	public void insertHomework(String name, String deadline, String information, String link, String attachFileName,

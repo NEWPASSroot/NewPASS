@@ -221,32 +221,53 @@
 			<%
 				for (int i = 0; i < homeworkDatas.size(); i++) {
 					if (i % 3 == 0) {
-						out.println("<div class=\"row\">");
+			%>
+			<div class="row">
+				<%
 					}
-					out.println("<div class=\"col-md-4 col-sm-4\">");
-					out.println("<div class=\"price-table\">");
-					out.println("<!-- Plan  -->");
-					out.println("<div class=\"pricing-head\">");
-					String viewArgs = "'"  + homeworkDatas.get(i).id + "', '" + homeworkDatas.get(i).name + "', '" + homeworkDatas.get(i).deadline + "', '"
-							+ homeworkDatas.get(i).information + "', '" + homeworkDatas.get(i).link + "', '" + homeworkDatas.get(i).attach_file_name + "'";
-					out.println("<a href=\"#homeworks\" id=\"button_view_homework\" onclick=\"viewHomework(" + viewArgs
-							+ ")\" ><h4>" + homeworkDatas.get(i).name + "</h4></a>");
-					out.println("<span>繳交期限<br>" + homeworkDatas.get(i).deadline + "</span>");
-					out.println("</div>");
-					out.println("<div class=\"price-in mart-15\">");
-					String editDeleteArgs = homeworkDatas.get(i).id + ", '" + homeworkDatas.get(i).name + "', '"
-							+ homeworkDatas.get(i).deadline + "', '" + homeworkDatas.get(i).information + "', '"
-							+ homeworkDatas.get(i).link + "', '" + homeworkDatas.get(i).attach_file_name + "'";
-					out.println("<button class=\"btn btn-success\" id=\"button_edit_homework\" onclick=\"editHomework("
-							+ editDeleteArgs + ")\">編輯</button>");
-					out.println("<button class=\"btn btn-danger\" id=\"button_delete_homework\" onclick=\"deleteHomework("
-							+ editDeleteArgs + ")\">刪除</button>");
-					out.println("</div>");
-					out.println("</div>");
-					out.println("</div>");
+				%>
+				<div class="col-md-4 col-sm-4">
+					<div class="price-table">
+						<!-- Plan  -->
+						<div class="pricing-head">
+							<%
+								String viewArgs = "'" + homeworkDatas.get(i).id + "', '" + homeworkDatas.get(i).name + "', '"
+											+ homeworkDatas.get(i).deadline + "', '" + homeworkDatas.get(i).information + "', '"
+											+ homeworkDatas.get(i).link + "', '" + homeworkDatas.get(i).attach_file_name + "'";
+							%>
+							<a href="#homeworks" id="button_view_homework"
+								onclick="viewHomework(<%out.print(viewArgs);%>)">
+								<%
+									out.print(homeworkDatas.get(i).name);
+								%>
+							</a> <br> <span>繳交期限<br>
+								<%
+									out.print(homeworkDatas.get(i).deadline);
+								%></span>
+						</div>
+						<div class="price-in mart-15">
+							<%
+								String editDeleteArgs = homeworkDatas.get(i).id + ", '" + homeworkDatas.get(i).name + "', '"
+											+ homeworkDatas.get(i).deadline + "', '" + homeworkDatas.get(i).information + "', '"
+											+ homeworkDatas.get(i).link + "', '" + homeworkDatas.get(i).attach_file_name + "'";
+							%>
+							<button class="btn btn-success" id="button_edit_homework"
+								onclick="editHomework(
+							<%out.print(editDeleteArgs);%> )">編輯</button>
+							<button class="btn btn-danger" id="button_delete_homework"
+								onclick="deleteHomework(<%out.print(editDeleteArgs);%>)">刪除</button>
+						</div>
+					</div>
+				</div>
+				<%
 					if ((i + 1) % 3 == 0) {
-						out.println("</div><br>");
-					}
+				%>
+			</div>
+			<br>
+			<%
+				}
+			%>
+			<%
 				}
 			%>
 		</div>
