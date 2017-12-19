@@ -1,0 +1,8 @@
+
+*.pyc
+src/AssignmentCorrection/AssignmentCorrection.egg-info/PKG-INFO
+*.txt
+src/AssignmentCorrection/TestData/Python/hw9/test/nosetests.xml
+*.xml
+*.pdf
+*.docx
