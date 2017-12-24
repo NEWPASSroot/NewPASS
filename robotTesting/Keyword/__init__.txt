@@ -1,0 +1,5 @@
+*** Settings ***
+Library           lib/DatabaseHandler.py
+
+*** Variables ***
+${TestData}       ../TestData

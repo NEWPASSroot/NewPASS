@@ -1,0 +1,23 @@
+*** Settings ***
+Resource          ../GlobalDefine.txt
+Resource          ../ServerConfig.txt
+Resource          common_resource.txt
+Library           lib/Selenium2Improved.py
+
+*** Variables ***
+${userName}       0    # teacher's account
+${userPassword}    0    # teacher's password
+
+*** Keywords ***
+Login Page
+    Open Browser    ${LOGIN_URL}    ${BROWSER}
+    Maximize Browser Window
+
+Login TestSuite Setup
+    Login Page
+    ${attachFilePath}=    Catenate    SEPARATOR=\\    ${EXECDIR}    TestData    Login    initialize.sql
+    load database    ${DB_URL}    ${DB_NAME}    ${DB_ACCOUNT}    ${DB_PASSWORD}    ${attachFilePath}
+
+Login TestSuite TearDown
+    Clean Database    ${DB_URL}    ${DB_ACCOUNT}    ${DB_PASSWORD}    ${DB_NAME}
+    Close Browser

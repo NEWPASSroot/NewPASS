@@ -1,0 +1,14 @@
+*** Settings ***
+Library           Keyword/lib/Selenium2Improved.py
+Resource          GlobalDefine.txt
+Resource          Keyword/PassLogin.txt
+
+*** Test Cases ***
+LoginSuccess
+    [Documentation]    Testing PASS system login and logout function.
+    [Setup]    Login TestSuite Setup
+    Input Text    userId    0
+    Input Password    userPassword    0
+    Click Button    xpath = //button[@type="submit"]
+    Element Text Should Be    //h2[@class="text-dec"]/marquee    WELCOME TO PASS
+    [Teardown]    Login TestSuite TearDown

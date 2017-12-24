@@ -1,7 +1,11 @@
 
 *.pyc
 src/AssignmentCorrection/AssignmentCorrection.egg-info/PKG-INFO
-*.txt
+dependency_links.txt
+PKG-INFO.txt
+requires.txt
+SOURCES.txt
+top_level.txt
 src/AssignmentCorrection/TestData/Python/hw9/test/nosetests.xml
 *.xml
 *.pdf

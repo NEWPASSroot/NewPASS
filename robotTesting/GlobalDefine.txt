@@ -1,0 +1,5 @@
+*** Variables ***
+${BROWSER}        googlechrome
+${LOGIN_URL}      http://127.0.0.1:8080/NewPASS
+${SELENIUM_SPEED}    0.2
+${SELENIUM_SPEED_SLOW}    1

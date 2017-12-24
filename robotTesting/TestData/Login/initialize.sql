@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- 正在導出表  pass.user 的資料：~7 rows (大約)
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`id`, `user_id`, `name`, `password`, `role`, `email`) VALUES
-	(1passhomeworks, '1', 'admin', '1', 'administrator', 'admin@gmail.com'),
+	(1, '1', 'admin', '1', 'administrator', 'admin@gmail.com'),
 	(2, '123', 'Happy123', '321', 'instructor', 'happy@mail.com'),
 	(3, '0', '崔智賢', '0', 'student', 'studen@gmail.com'),
 	(4, '2', '旻孝援', '2', 'student', 'student2@gmail.com'),
