@@ -23,7 +23,8 @@
 					</button>
 				</div>
 				<div class="modal-body" style="pediting: 40px 50px;">
-					<form role="form" action="HomeworkFileUploadServlet" method="post" enctype="multipart/form-data">
+					<form role="form" action="HomeworkFileUploadServlet" method="post"
+						enctype="multipart/form-data">
 						<div class="form-group">
 							<label for="edit_homework_id"> 作業Id</label> <input type="text"
 								class="form-control" id="edit_homework_id" name="homework_id"
@@ -39,6 +40,12 @@
 								type="datetime-local" class="form-control"
 								id="edit_homework_deadline" name="homework_deadline" required>
 						</div>
+						<div class="form-check">
+							<label class="form-check-label" for="edit_homework_delay_deadline"><input
+								type="checkbox" class="form-check-input"
+								id="edit_homework_delay_deadline" name="homework_delay_deadline"> 允許遲交</label>
+						</div>
+						<br>
 						<div class="form-group">
 							<label for="edit_homework_information"> 作業描述</label>
 							<textarea class="form-control" id="edit_homework_information"
@@ -54,6 +61,11 @@
 								type="file" class="form-control" id="edit_homework_attach_file"
 								name="homework_attach_file">
 							<p id="edit_original_homework_attach_file"></p>
+						</div>
+						<div class="form-group">
+							<label for="edit_homework_UT"> UT</label> <input type="file"
+								class="form-control" id="edit_homework_UT" name="homework_UT">
+							<p id="edit_original_homework_UT_file"></p>
 						</div>
 						<button type="submit" class="btn btn-success btn-block">
 							編輯</button>

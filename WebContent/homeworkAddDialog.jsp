@@ -36,6 +36,12 @@
 								id="add_homework_deadline" name="homework_deadline"
 								required="required">
 						</div>
+						<div class="form-check">
+							<label class="form-check-label" for="add_homework_delay_deadline"><input
+								type="checkbox" class="form-check-input"
+								id="add_homework_delay_deadline" name="homework_delay_deadline"> 允許遲交</label>
+						</div>
+						<br>
 						<div class="form-group">
 							<label for="add_homework_information"> 作業描述</label>
 							<textarea class="form-control" id="add_homework_information"
@@ -52,8 +58,8 @@
 								name="homework_attach_file">
 						</div>
 						<div class="form-group">
-							<label for="add_homework_UT"> UT</label> <input
-								type="file" class="form-control" id="add_homework_UT"
+							<label for="add_homework_UT"> UT</label> <input type="file"
+								accept=".zip" class="form-control" id="add_homework_UT"
 								name="homework_UT">
 						</div>
 						<button type="submit" class="btn btn-success btn-block">

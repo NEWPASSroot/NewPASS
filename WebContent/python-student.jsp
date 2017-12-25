@@ -250,7 +250,8 @@
 							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 							long nowTime = System.currentTimeMillis();
 							long deadlineTime= sdf.parse(deadline).getTime();
-							if(nowTime>deadlineTime){
+							boolean delayDeadline = homeworkDatas.get(i).delayDeadline;
+							if(nowTime>deadlineTime && (!delayDeadline)){
 								%>
 								<font color="red">
 								<%out.print(deadline);%>
@@ -282,7 +283,7 @@
 								String editDeleteArgs = homeworkDatas.get(i).id + ", '" + homeworkDatas.get(i).name + "', '"
 											+ homeworkDatas.get(i).deadline + "', '" + homeworkDatas.get(i).information + "', '"
 											+ homeworkDatas.get(i).link + "'";
-								if(nowTime>deadlineTime)
+								if(nowTime>deadlineTime && (!delayDeadline))
 								{
 							%>
 									<div class="btn btn-danger btn-block">

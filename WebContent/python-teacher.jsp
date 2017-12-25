@@ -232,24 +232,24 @@
 						<div class="pricing-head">
 							<%
 								String viewArgs = "'" + homeworkDatas.get(i).id + "', '" + homeworkDatas.get(i).name + "', '"
-											+ homeworkDatas.get(i).deadline + "', '" + homeworkDatas.get(i).information + "', '"
-											+ homeworkDatas.get(i).link + "', '" + homeworkDatas.get(i).attach_file_name + "'";
+											+ homeworkDatas.get(i).deadline + "', " + homeworkDatas.get(i).delayDeadline + ", '"
+											+ homeworkDatas.get(i).information + "', '" + homeworkDatas.get(i).link + "', '"
+											+ homeworkDatas.get(i).attach_file_name + "', '" + homeworkDatas.get(i).UT_file_name + "'";
 							%>
 							<a href="#homeworks" id="button_view_homework"
-								onclick="viewHomework(<%out.print(viewArgs);%>)">
-								<%
-									out.print(homeworkDatas.get(i).name);
-								%>
-							</a> <br> <span>繳交期限<br>
-								<%
-									out.print(homeworkDatas.get(i).deadline);
-								%></span>
+								onclick="viewHomework(<%out.print(viewArgs);%>)"> <%
+ 								out.print(homeworkDatas.get(i).name);
+ 							%>
+							</a> <br> <span>繳交期限<br> <%
+ 								out.print(homeworkDatas.get(i).deadline);
+							%></span>
 						</div>
 						<div class="price-in mart-15">
 							<%
 								String editDeleteArgs = homeworkDatas.get(i).id + ", '" + homeworkDatas.get(i).name + "', '"
-											+ homeworkDatas.get(i).deadline + "', '" + homeworkDatas.get(i).information + "', '"
-											+ homeworkDatas.get(i).link + "', '" + homeworkDatas.get(i).attach_file_name + "'";
+											+ homeworkDatas.get(i).deadline + "', " + homeworkDatas.get(i).delayDeadline + ", '"
+											+ homeworkDatas.get(i).information + "', '" + homeworkDatas.get(i).link + "', '"
+											+ homeworkDatas.get(i).attach_file_name + "', '" + homeworkDatas.get(i).UT_file_name + "'";
 							%>
 							<button class="btn btn-success" id="button_edit_homework"
 								onclick="editHomework(

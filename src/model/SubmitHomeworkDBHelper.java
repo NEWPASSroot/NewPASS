@@ -20,10 +20,10 @@ public class SubmitHomeworkDBHelper {
 	private DatabaseConnector dbConnector = new DatabaseConnector();
 
 	public ArrayList<SubmitHomeworkData> getAllData() {
+		String sql = "Select * From " + TABLE_NAME;
 		ArrayList<SubmitHomeworkData> result = new ArrayList<SubmitHomeworkData>();
 		ResultSet resultSet;
 		try {
-			String sql = "Select * From " + TABLE_NAME;
 			resultSet = dbConnector.statement.executeQuery(sql);
 			while (resultSet.next()) {
 				SubmitHomeworkData submitHomeworkData = new SubmitHomeworkData();
@@ -44,11 +44,11 @@ public class SubmitHomeworkDBHelper {
 	}
 
 	public int getHomeworkFileId(int teacherAssignmentId, String studentId) {
+		String sql = "Select " + COL_ID + " From " + TABLE_NAME + " Where " + COL_TEACHER_ASSIGNMENT_ID + " = "
+				+ teacherAssignmentId + " And " + COL_STUDENT_ID + " = " + studentId;
 		int id = 0;
 		ResultSet resultSet;
 		try {
-			String sql = "Select " + COL_ID + " From " + TABLE_NAME + " Where " + COL_TEACHER_ASSIGNMENT_ID + " = "
-					+ teacherAssignmentId + " And " + COL_STUDENT_ID + " = " + studentId;
 			resultSet = dbConnector.statement.executeQuery(sql);
 			if (resultSet.next()) {
 				id = resultSet.getInt(COL_ID);
@@ -61,10 +61,10 @@ public class SubmitHomeworkDBHelper {
 	}
 
 	public String getHomeworkFileName(int id) {
+		String sql = "Select " + COL_HOMEWORK_FILE_NAME + " From " + TABLE_NAME + " Where " + COL_ID + " = " + id;
 		String fileName = null;
 		ResultSet resultSet;
 		try {
-			String sql = "Select " + COL_HOMEWORK_FILE_NAME + " From " + TABLE_NAME + " Where " + COL_ID + " = " + id;
 			resultSet = dbConnector.statement.executeQuery(sql);
 			if (resultSet.next()) {
 				fileName = resultSet.getString(COL_HOMEWORK_FILE_NAME);
@@ -77,11 +77,11 @@ public class SubmitHomeworkDBHelper {
 	}
 
 	public String getHomeworkFileName(int assignmentId, String studentId) {
+		String sql = "Select " + COL_HOMEWORK_FILE_NAME + " From " + TABLE_NAME + " Where " + COL_TEACHER_ASSIGNMENT_ID
+				+ " = " + assignmentId + " And " + COL_STUDENT_ID + " = " + studentId;
 		String fileName = null;
 		ResultSet resultSet;
 		try {
-			String sql = "Select " + COL_HOMEWORK_FILE_NAME + " From " + TABLE_NAME + " Where "
-					+ COL_TEACHER_ASSIGNMENT_ID + " = " + assignmentId + " And " + COL_STUDENT_ID + " = " + studentId;
 			resultSet = dbConnector.statement.executeQuery(sql);
 			if (resultSet.next()) {
 				fileName = resultSet.getString(COL_HOMEWORK_FILE_NAME);
@@ -141,6 +141,23 @@ public class SubmitHomeworkDBHelper {
 			System.out.println("Can not get the attach file of our homeworks: " + e);
 		}
 		return attachFile;
+	}
+
+	public ArrayList<Integer> getDeleteId(int teacherAssignmentId) {
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		ResultSet resultSet;
+		try {
+			String sql = "Select " + COL_ID + " From " + TABLE_NAME + " Where " + COL_TEACHER_ASSIGNMENT_ID + " = "
+					+ teacherAssignmentId;
+			resultSet = dbConnector.statement.executeQuery(sql);
+			while (resultSet.next()) {
+				result.add(resultSet.getInt(COL_ID));
+			}
+			System.out.println("Finish getting the delete id of homeworks");
+		} catch (Exception e) {
+			System.out.println("Can not get the delete id of our homeworks: " + e);
+		}
+		return result;
 	}
 
 	public void insertHomework(int teacherAssignmentId, String studentId, String submitDatetime,

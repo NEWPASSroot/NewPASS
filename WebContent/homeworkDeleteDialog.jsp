@@ -23,7 +23,8 @@
 					</button>
 				</div>
 				<div class="modal-body" style="pdeleteing: 40px 50px;">
-					<form role="form" action="HomeworkFileUploadServlet" method="post" enctype="multipart/form-data">
+					<form role="form" action="HomeworkFileUploadServlet" method="post"
+						enctype="multipart/form-data">
 						<div class="form-group">
 							<label for="delete_homework_id"> 作業Id</label> <input type="text"
 								class="form-control" id="delete_homework_id" name="homework_id"
@@ -39,6 +40,14 @@
 								type="datetime-local" class="form-control"
 								id="delete_homework_deadline" name="homework_deadline" disabled>
 						</div>
+						<div class="form-check">
+							<label class="form-check-label"
+								for="delete_homework_delay_deadline"><input
+								type="checkbox" class="form-check-input"
+								id="delete_homework_delay_deadline"
+								name="homework_delay_deadline" disabled> 允許遲交</label>
+						</div>
+						<br>
 						<div class="form-group">
 							<label for="delete_homework_information"> 作業描述</label>
 							<textarea class="form-control" id="delete_homework_information"
@@ -51,8 +60,14 @@
 						</div>
 						<div class="form-group">
 							<label for="delete_homework_attach_file"> 附件</label> <input
-								type="text" class="form-control" id="delete_homework_attach_file"
-								name="homework_attach_file" disabled>
+								type="text" class="form-control"
+								id="delete_homework_attach_file" name="homework_attach_file"
+								disabled>
+						</div>
+						<div class="form-group">
+							<label for="delete_homework_UT_file"> UT</label> <input
+								type="text" class="form-control" id="delete_homework_UT_file"
+								name="homework_UT_file" disabled>
 						</div>
 						<button type="submit" class="btn btn-success btn-block">
 							刪除</button>

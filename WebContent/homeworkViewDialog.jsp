@@ -32,6 +32,15 @@
 						<p id="view_homework_deadline"></p>
 					</div>
 					<div class="container-fluid">
+						<div class="form-check">
+							<label class="form-check-label" for="add_homework_delay_deadline"
+								style="color: #3399FF"><input type="checkbox"
+								class="form-check-input" id="view_homework_delay_deadline"
+								name="homework_delay_deadline" disabled> 允許遲交</label>
+						</div>
+						<br>
+					</div>
+					<div class="container-fluid">
 						<label for="view_homework_information" style="color: #3399FF">作業描述</label>
 						<p id="view_homework_information"></p>
 					</div>
@@ -41,6 +50,7 @@
 					</div>
 					<div class="container-fluid" id="view_homework_link"></div>
 					<div class="container-fluid" id="view_homework_attach_file"></div>
+					<div class="container-fluid" id="view_homework_UT_file"></div>
 					<br>
 					<button type="submit" class="btn btn-danger btn-block"
 						data-dismiss="modal">關閉</button>

@@ -21,13 +21,15 @@ CREATE TABLE IF NOT EXISTS `homeworks` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '0',
   `deadline` varchar(20) NOT NULL DEFAULT '0',
+  `delay_deadline` bit(1) NOT NULL DEFAULT b'0',
   `information` text,
   `link` tinytext,
   `attach_file_name` varchar(50) DEFAULT NULL,
   `attach_file` mediumblob,
-  `UT` mediumblob,
+  `UT_file_name` varchar(50) DEFAULT NULL,
+  `UT_file` mediumblob,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 正在導出表  pass.homeworks 的資料：~0 rows (大約)
 /*!40000 ALTER TABLE `homeworks` DISABLE KEYS */;
@@ -39,11 +41,11 @@ CREATE TABLE IF NOT EXISTS `submit_homeworks` (
   `teacher_assignment_id` int(11) NOT NULL,
   `student_id` varchar(20) NOT NULL,
   `score` int(11) DEFAULT '0',
-  `submit_datetime` varchar(20) DEFAULT NULL,
+  `submit_datetime` varchar(20) NOT NULL,
   `homework_file_name` varchar(50) DEFAULT NULL,
   `homework_file` mediumblob,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 正在導出表  pass.submit_homeworks 的資料：~0 rows (大約)
 /*!40000 ALTER TABLE `submit_homeworks` DISABLE KEYS */;
