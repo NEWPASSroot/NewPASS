@@ -11,7 +11,7 @@ Instructor add assignment
     ${Add_Homework_Button}=    set variable    xpath = //button[@id="button_add_homework"]
     Wait Until Page Contains Element    ${Add_Homework_Button}
     Click Button    ${Add_Homework_Button}
-    ${Assignment} =     set variable    xpath=//input[@id="add_homework_name"]
+    ${Assignment} =    set variable    xpath=//input[@id="add_homework_name"]
     wait until element is visible    ${Assignment}
     Input Text    ${Assignment}    Assignment 1
     ${DeadLine}=    set variable    xpath = //input[@id= "add_homework_deadline"]
