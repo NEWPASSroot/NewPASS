@@ -1,0 +1,23 @@
+*** Settings ***
+Resource          Keyword/common_resource.txt
+Resource          Keyword/Student.txt
+
+*** Test Cases ***
+Upload
+    [Setup]    Upload Assignment SetUp
+    ${Course_Python}=    set variable    xpath = //div[@class="col-md-4 col-sm-6 padleft-right"]//a[@href="python-student.jsp"]
+    Wait Until Page Contains Element    ${Course_Python}
+    Click Element    ${Course_Python}
+    ${AssignmentInfoHref}=    set variable    xpath=//a[@id="button_view_homework"]
+    Wait Until Page Contains Element    ${AssignmentInfoHref}
+    Click Element    ${AssignmentInfoHref}
+    ${AssignmentLink}=    set variable    xpath = //a[@id="view_homework_link"]
+    Wait Until Element Is Visible    ${AssignmentLink}
+    Click Element    ${AssignmentLink}
+    ${CloseButton}=    Set Variable    xpath = //div[@class="modal-content"]/div[@class="modal-body"]/button[text()="關閉"]
+    Click Element    ${CloseButton}
+    ${UploadFile}=    Set Variable    xpath = //a[@onclick="viewHomework( \ '1', 'Assignment 01', '2018-01-03T23:59', 'testing assignment', '', 'Homework 9.pdf')"]/../../div[@class="price-in mart-15"]/form[1]/input[3]
+    ${FilePath} =     Catenate    SEPARATOR=\\    ${EXECDIR}    TestData    Assignment    Python
+    ...    hw1.zip
+    Choose File    ${UploadFile}    ${FilePath}
+    [Teardown]    Login TestSuite TearDown

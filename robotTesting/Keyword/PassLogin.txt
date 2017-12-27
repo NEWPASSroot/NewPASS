@@ -12,7 +12,7 @@ Login Page
 
 Login TestSuite Setup
     Login Page
-    ${attachFilePath}=    Catenate    SEPARATOR=\\    ${EXECDIR}    TestData    Login    initialize.sql
+    ${attachFilePath}=    Catenate    SEPARATOR=\\    ${EXECDIR}    TestData    Upload    uploadTestSuite.sql
     load database    ${DB_URL}    ${DB_NAME}    ${DB_ACCOUNT}    ${DB_PASSWORD}    ${attachFilePath}
 
 Login TestSuite TearDown

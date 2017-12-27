@@ -1,11 +1,18 @@
 *** Settings ***
 Resource          Keyword/common_resource.txt
+Resource          Keyword/Instructor.txt
 
 *** Test Cases ***
 Instructor add assignment
-    ${Course_Python}=    xpath = //div[@class="col-md-4 col-sm-6 padleft-right"]//h3[text()="Python"]
-    Wait Until Page Contains    ${Course_Python}
+    [Setup]    Add Assignment SetUp
+    ${Course_Python}=    set variable    xpath = //div[@class="col-md-4 col-sm-6 padleft-right"]//a[@href="python-teacher.jsp"]
+    Wait Until Page Contains Element    ${Course_Python}
     Click Element    ${Course_Python}
-    ${Add_Homework_Button}=    xpath = //button[@id="button_add_homework"]
-    Wait Until Page Contains    ${Add_Homework_Button}
+    ${Add_Homework_Button}=    set variable    xpath = //button[@id="button_add_homework"]
+    Wait Until Page Contains Element    ${Add_Homework_Button}
     Click Button    ${Add_Homework_Button}
+    ${Assignment} =     set variable    xpath=//input[@id="add_homework_name"]
+    wait until element is visible    ${Assignment}
+    Input Text    ${Assignment}    Assignment 1
+    ${DeadLine}=    set variable    xpath = //input[@id= "add_homework_deadline"]
+    Input Text    ${DeadLine}    2018/01/03 下午 11:59
