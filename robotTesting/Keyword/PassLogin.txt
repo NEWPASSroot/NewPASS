@@ -1,8 +1,5 @@
 *** Settings ***
-Resource          ../GlobalDefine.txt
-Resource          ../ServerConfig.txt
 Resource          common_resource.txt
-Library           lib/Selenium2Improved.py
 
 *** Variables ***
 ${userName}       0    # teacher's account

@@ -3,3 +3,5 @@ Library           BuiltIn
 Library           HttpLibrary.HTTP
 Library           lib/Selenium2Improved.py
 Library           lib/DatabaseHandler.py
+Resource          ../GlobalDefine.txt
+Resource          ../ServerConfig.txt

@@ -1,0 +1,11 @@
+*** Settings ***
+Resource          Keyword/common_resource.txt
+
+*** Test Cases ***
+Instructor add assignment
+    ${Course_Python}=    xpath = //div[@class="col-md-4 col-sm-6 padleft-right"]//h3[text()="Python"]
+    Wait Until Page Contains    ${Course_Python}
+    Click Element    ${Course_Python}
+    ${Add_Homework_Button}=    xpath = //button[@id="button_add_homework"]
+    Wait Until Page Contains    ${Add_Homework_Button}
+    Click Button    ${Add_Homework_Button}

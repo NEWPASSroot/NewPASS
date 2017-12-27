@@ -67,10 +67,10 @@
 								class="form-control" id="edit_homework_UT" name="homework_UT">
 							<p id="edit_original_homework_UT_file"></p>
 						</div>
-						<button type="submit" class="btn btn-success btn-block">
+						<button type="submit" class="btn btn-success btn-block" id="edit_homework_submit">
 							編輯</button>
 						<button type="submit" class="btn btn-danger btn-block"
-							data-dismiss="modal">取消</button>
+							data-dismiss="modal" id="edit_homework_cancel">取消</button>
 					</form>
 				</div>
 			</div>

@@ -1,0 +1,12 @@
+*** Settings ***
+Resource          common_resource.txt
+Resource          PassLogin.txt
+
+*** Keywords ***
+Add Assignment SetUp
+    Login Page
+    ${attachFilePath}=    Catenate    SEPARATOR=\\    ${EXECDIR}    TestData    Login    initialize.sql
+    load database    ${DB_URL}    ${DB_NAME}    ${DB_ACCOUNT}    ${DB_PASSWORD}    ${attachFilePath}
+    Input Text    userId    123
+    Input Password    userPassword    321
+    Click Button    xpath = //button[@type="submit"]

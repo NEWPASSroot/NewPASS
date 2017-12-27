@@ -69,10 +69,10 @@
 								type="text" class="form-control" id="delete_homework_UT_file"
 								name="homework_UT_file" disabled>
 						</div>
-						<button type="submit" class="btn btn-success btn-block">
+						<button type="submit" class="btn btn-success btn-block" id="delete_homework_submit">
 							刪除</button>
 						<button type="submit" class="btn btn-danger btn-block"
-							data-dismiss="modal">取消</button>
+							data-dismiss="modal" id="delete_homework_cancel">取消</button>
 					</form>
 				</div>
 			</div>

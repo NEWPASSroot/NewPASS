@@ -12,3 +12,12 @@ LoginSuccess
     Click Button    xpath = //button[@type="submit"]
     Element Text Should Be    //h2[@class="text-dec"]/marquee    WELCOME TO PASS
     [Teardown]    Login TestSuite TearDown
+
+Login Failed
+    [Setup]    Login TestSuite Setup
+    Input Text    userId    123
+    Input Password    userPassword    456
+    Click Button    xpath = //button[@type="submit"]
+    Element Text Should Be    userId    ${EMPTY}
+    Element Text Should Be    userPassword    ${EMPTY}
+    [Teardown]    Login TestSuite TearDown

@@ -62,10 +62,10 @@
 								accept=".zip" class="form-control" id="add_homework_UT"
 								name="homework_UT">
 						</div>
-						<button type="submit" class="btn btn-success btn-block">
+						<button type="submit" class="btn btn-success btn-block" id="add_homework_submit">
 							新增</button>
 						<button type="submit" class="btn btn-danger btn-block"
-							data-dismiss="modal">取消</button>
+							data-dismiss="modal" id="add_homework_cancel">取消</button>
 					</form>
 				</div>
 			</div>
