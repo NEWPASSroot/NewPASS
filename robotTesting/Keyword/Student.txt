@@ -5,7 +5,7 @@ Resource          PassLogin.txt
 *** Keywords ***
 Upload Assignment SetUp
     Login Page
-    ${attachFilePath}=    Catenate    SEPARATOR=\\    ${EXECDIR}    TestData    Login    initialize.sql
+    ${attachFilePath}=    Catenate    SEPARATOR=\\    ${EXECDIR}    TestData    Upload    uploadTestSuite.sql
     load database    ${DB_URL}    ${DB_NAME}    ${DB_ACCOUNT}    ${DB_PASSWORD}    ${attachFilePath}
     Input Text    userId    0
     Input Password    userPassword    0

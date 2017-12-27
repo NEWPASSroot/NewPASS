@@ -14,10 +14,19 @@ Upload
     ${AssignmentLink}=    set variable    xpath = //a[@id="view_homework_link"]
     Wait Until Element Is Visible    ${AssignmentLink}
     Click Element    ${AssignmentLink}
+    ${UploadFile}=    Set Variable    xpath = //a[@onclick="viewHomework( \ '2', 'Assignment 01', '2018-11-11T11:11', 'Test', 'Test', 'Homework 9.pdf')"]/../../div[@class="price-in mart-15"]/form[1]/input[3]
     ${CloseButton}=    Set Variable    xpath = //div[@class="modal-content"]/div[@class="modal-body"]/button[text()="關閉"]
     Click Element    ${CloseButton}
-    ${UploadFile}=    Set Variable    xpath = //a[@onclick="viewHomework( \ '1', 'Assignment 01', '2018-01-03T23:59', 'testing assignment', '', 'Homework 9.pdf')"]/../../div[@class="price-in mart-15"]/form[1]/input[3]
-    ${FilePath} =     Catenate    SEPARATOR=\\    ${EXECDIR}    TestData    Assignment    Python
+    Wait Until Element is not visible    ${AssignmentLink}
+    ${FilePath} =    Catenate    SEPARATOR=\\    ${EXECDIR}    TestData    Assignment    Python
     ...    hw1.zip
     Choose File    ${UploadFile}    ${FilePath}
+    ${Submit}=    Set Variable    xpath = //a[@onclick="viewHomework( \ '2', 'Assignment 01', '2018-11-11T11:11', 'Test', 'Test', 'Homework 9.pdf')"]/../../div[2]/form[1]/button
+    Wait Until Element Is Visible    ${Submit}
+    Click Element    ${Submit}
+    ${Check}=    Set Variable    xpath = //a[@onclick="viewHomework( \ '2', 'Assignment 01', '2018-11-11T11:11', 'Test', 'Test', 'Homework 9.pdf')"]/../../div[2]/form[2]/button
+    Wait Until Element Is Visible    ${Check}
+    Click Element    ${Check}
+    ${Target Status} =     Set Variable    xpath = //table/tbody//tr[@class="info"]
+    Wait until page contains element    ${Target Status}
     [Teardown]    Login TestSuite TearDown
