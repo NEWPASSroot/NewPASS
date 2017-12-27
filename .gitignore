@@ -10,3 +10,12 @@ src/AssignmentCorrection/TestData/Python/hw9/test/nosetests.xml
 *.xml
 *.pdf
 *.docx
+.classpath
+.classpath
+.settings/org.eclipse.wst.common.project.facet.core.xml
+mysql-connector-java-5.1.44/src/doc/sources/.project
+mysql-connector-java-5.1.44/src/doc/sources/target/classes/META-INF/MANIFEST.MF
+mysql-connector-java-5.1.44/src/doc/sources/target/classes/META-INF/maven/mysql/mysql-connector-java/pom.properties
+mysql-connector-java-5.1.44/src/doc/sources/.settings/org.eclipse.jdt.core.prefs
+.settings/org.eclipse.wst.common.project.facet.core.xml
+.classpath
