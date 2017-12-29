@@ -33,13 +33,18 @@
 		UserDBHelper userDBHelper = new UserDBHelper();
 		request.setCharacterEncoding("UTF-8");
 		String userId = request.getParameter("userId");
+		String userName = "";
 		String userPassword = request.getParameter("userPassword");
+		String userRole = "";
 		if(session.getAttribute("userId")==null){
-			String userRole = userDBHelper.login(userId, userPassword);
+			String[] userData = userDBHelper.login(userId, userPassword);
+			userName = userData[0];
+			userRole = userData[1];
 			if(userRole.equals("")){
 				response.sendRedirect("login.jsp");
 			}else{
 				session.setAttribute("userId", userId);
+				session.setAttribute("userName", userName);
 				session.setAttribute("userRole", userRole);
 				response.sendRedirect("#"); //將傳過來的表單資料洗掉
 			}
@@ -59,6 +64,16 @@
 						class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="index.jsp">PASS</a>
+				<%
+					if(session.getAttribute("userName")!=null && session.getAttribute("userRole")!=null)
+					{
+						userName = session.getAttribute("userName").toString();
+						userRole = session.getAttribute("userRole").toString();
+				%>
+						<span><%out.print(userName+" 您好,您目前登入的身分是"+userRole);%></span>
+				<%
+					}
+				%>
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav navbar-right">
@@ -122,16 +137,7 @@
 								Magnam atque, nostrum veniam consequatur libero fugiat,
 								similique quis.</p>
 						</figcaption>
-						<%
-							if(session.getAttribute("userRole")!=null){
-								String userRole = session.getAttribute("userRole").toString();
-								if(userRole.equals("student")){
-									out.println("<a href=\"python-student.jsp\"></a>");
-								}else{
-									out.println("<a href=\"python-teacher.jsp\"></a>");
-								}
-							}
-						%>
+						<a href="python.jsp"></a>
 					</figure>
 				</div>
 				<div class="col-md-4 col-sm-6 padleft-right">

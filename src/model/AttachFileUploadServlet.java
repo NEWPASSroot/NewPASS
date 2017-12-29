@@ -70,7 +70,7 @@ public class AttachFileUploadServlet extends HttpServlet {
 				}
 			}
 		}
-		response.sendRedirect("/NewPASS/python-teacher.jsp#homeworks");
+		response.sendRedirect("/NewPASS/python.jsp#homeworks");
 	}
 
 }

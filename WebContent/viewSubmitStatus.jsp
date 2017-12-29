@@ -82,7 +82,8 @@
 		function drawChart() {
 
 			// Create the data table.  ******原始資料******
-	<%int[] status = new int[3];
+	<%
+			int[] status = new int[3];
 			int[] ranges = new int[11];
 			for (User student : students) {
 				String studentId = student.userId;
@@ -189,7 +190,7 @@
 					<div class="banner-text text-center">
 						<div class="text-border">
 							<h2 class="text-dec">
-								<a href="python-student.jsp"> <%=homeworkName%>
+								<a href="python.jsp"> <%=homeworkName%>
 								</a>
 							</h2>
 						</div>
@@ -238,7 +239,8 @@
 				</thead>
 				<tbody>
 					<%
-						for (User student : students) {
+						for (int i=0; i<students.size(); i++) {
+							User student = students.get(i);
 							String studentId = student.userId;
 							String studentName = student.name;
 							int score = submitHomeworkDBHelper.getScore(assignmentId, studentId);
@@ -248,14 +250,30 @@
 							if (submitHWTime == null || submitHWTime.equals("")) {
 					%>
 					<tr class="danger">
-						<td><%=studentId%></td>
+						<td id="student_id_<%=i%>"><%=studentId%></td>
 						<td><%=studentName%></td>
 						<td>
 							<%
 								out.print("未繳交");
 							%>
 						</td>
-						<td><%=score%></td>
+						<%
+							if(userRole.equals("student"))
+							{
+						%>
+								<td><%=score%></td>
+						<%
+							}
+							else
+							{
+						%>
+								<td>
+								<input type="number" name="submit_homework_score"
+									id="submit_homework_score_<%=i%>" value=<%=score%>>
+								</td>
+						<%
+							}
+						%>
 						<td><%=submitHWTime%></td>
 						<td><%=HWFileName%></td>
 					</tr>
@@ -265,7 +283,7 @@
 								if (sdf.parse(submitHWTime).getTime() > sdf.parse(deadline).getTime()) {
 					%>
 					<tr class="warning">
-						<td><%=studentId%></td>
+						<td id="student_id_<%=i%>"><%=studentId%></td>
 						<td><%=studentName%></td>
 						<td>
 							<%
@@ -294,7 +312,23 @@
 								}
 							%>
 						</td>
-						<td><%=score%></td>
+						<%
+							if(userRole.equals("student"))
+							{
+						%>
+								<td><%=score%></td>
+						<%
+							}
+							else
+							{
+						%>
+								<td>
+								<input type="number" name="submit_homework_score"
+									id="submit_homework_score_<%=i%>" value=<%=score%>>
+								</td>
+						<%
+							}
+						%>
 						<td><%=submitHWTime%></td>
 						<td><%=HWFileName%></td>
 					</tr>
@@ -303,28 +337,90 @@
 						} else {
 					%>
 					<tr class="info">
-						<td><%=studentId%></td>
+						<td id="student_id_<%=i%>"><%=studentId%></td>
 						<td><%=studentName%></td>
 						<td>
 							<%
 								out.print("已繳交");
 							%>
 						</td>
-						<td><%=score%></td>
+						<%
+							if(userRole.equals("student"))
+							{
+						%>
+								<td><%=score%></td>
+						<%
+							}
+							else
+							{
+						%>
+								<td>
+								<input type="number" name="submit_homework_score"
+									id="submit_homework_score_<%=i%>" value=<%=score%>>
+								</td>
+						<%
+							}
+						%>
 						<td><%=submitHWTime%></td>
-						<td><%=HWFileName%></td>
+						<%
+							if(userRole.equals("student"))
+							{
+						%>
+								<td><%=HWFileName%></td>
+						<%
+							}
+							else
+							{
+						%>
+								<td><form role="form" action="HomeworkFileSubmitDownloadServlet"
+								method="post" enctype="multipart/form-data">
+								<%
+									int homeworkId = submitHomeworkDBHelper.getHomeworkFileId(assignmentId, studentId);
+										String homeworkFileName = submitHomeworkDBHelper.getHomeworkFileName(homeworkId);
+								%>
+								<input type="hidden" name="homework_id"
+									value=<%out.print(homeworkId);%>>
+								<button type="submit" class="btn btn-default">
+									<%
+										out.print(homeworkFileName);
+									%>
+								</button>
+							</form></td>
 					</tr>
 					<%
-						}
 							}
-					%>
-					<%
 						}
+					}
+				}
 					%>
 				</tbody>
+				<%
+					if(!userRole.equals("student")){
+				%>
+				<tfoot>
+					<tr>
+						<th>
+							<form role="form" action="SubmitHomeworkScoreServlet"
+								onsubmit="submitHomeworkScores(<%=students.size()%>)" method="post">
+							<input type="hidden" name="submit_homework_scores_assignment_id" value=<%=assignmentId%>>
+							<input type="hidden" name="submit_homework_scores_id"
+							id="submit_homework_scores_id">
+							<input type="hidden" name="submit_homework_scores"
+							id="submit_homework_scores">
+								<button type="submit" class="btn btn-default">
+									送出成績
+								</button>
+							</form>
+						</th>
+					</tr>
+				</tfoot>
+				<%
+					}
+				%>
 			</table>
 		</div>
 	</section>
+	
 	<!--Submit Status-->
 
 	<!--Pie Chart-->
@@ -356,6 +452,7 @@
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/custom.js"></script>
 	<script src="contactform/contactform.js"></script>
+	<script src="homeworkEvent.js"></script>
 
 </body>
 

@@ -69,3 +69,13 @@ function viewHomework(id, name, deadline, delayDeadline, information, link, atta
 		document.getElementById("view_homework_UT_file").innerHTML = "";
 	}
 }
+
+function submitHomeworkScores(size){
+	var scoreId = "", score = "";
+	for(var i=0; i<size; i++){
+		scoreId+=document.getElementById("student_id_"+i).innerHTML+" ";
+		score+=document.getElementById("submit_homework_score_"+i).value+" ";
+	}
+	document.getElementById("submit_homework_scores_id").value=scoreId;
+	document.getElementById("submit_homework_scores").value=score;
+}

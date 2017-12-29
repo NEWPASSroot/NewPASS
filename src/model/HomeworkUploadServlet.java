@@ -30,7 +30,7 @@ public class HomeworkUploadServlet extends HttpServlet {
 		String homeworkFileName = "";
 		InputStream inputStream = null;
 		if (homeworkFile != null) {
-			homeworkFileName = homeworkFile.getSubmittedFileName();
+			homeworkFileName = studentId + "_" + homeworkFile.getSubmittedFileName();
 			inputStream = homeworkFile.getInputStream();
 		}
 		if (studentId != null) {
@@ -42,7 +42,7 @@ public class HomeworkUploadServlet extends HttpServlet {
 				submitHomeworkDBHelper.updateHomework(id, submitDatetime, homeworkFileName, inputStream);
 			}
 		}
-		response.sendRedirect("/NewPASS/python-student.jsp#homeworks");
+		response.sendRedirect("/NewPASS/python.jsp#homeworks");
 	}
 
 }

@@ -38,14 +38,15 @@ public class UserDBHelper {
 		return result;
 	}
 
-	public String login(String userId, String userPassword) {
-		String sql = "Select " + COL_USER_ID + ", " + COL_USER_ROLE + ", " + COL_USER_PASSWORD + " From " + TABLE_NAME
+	public String[] login(String userId, String userPassword) {
+		String sql = "Select " + COL_USER_ID + ", " + COL_USER_NAME + ", " + COL_USER_ROLE + ", " + COL_USER_PASSWORD + " From " + TABLE_NAME
 				+ " Where " + COL_USER_ID + " = '" + userId + "' And " + COL_USER_PASSWORD + " = '" + userPassword + "'";
 		ResultSet resultSet;
-		String userRole = "";
+		String userName = "", userRole = "";
 		try {
 			resultSet = dbConnector.statement.executeQuery(sql);
 			if (resultSet.next()) {
+				userName = resultSet.getString(COL_USER_NAME);
 				userRole = resultSet.getString(COL_USER_ROLE);
 			}
 			System.out.print("login ");
@@ -57,7 +58,8 @@ public class UserDBHelper {
 		} catch (Exception e) {
 			System.out.println("The sql program for login has the error: " + e);
 		}
-		return userRole;
+		String[] result = {userName, userRole};
+		return result;
 	}
 
 	public void insertUser(String userId, String userName, String userRole, String userEmail) {

@@ -14,7 +14,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mentor Education Bootstrap Theme</title>
+<title>Python</title>
 <meta name="description"
 	content="Free Bootstrap Theme by BootstrapMade.com">
 <meta name="keywords"
@@ -162,6 +162,14 @@
 			<div class="row">
 				<div class="header-section text-center">
 					<h2>老師和助教的資訊</h2>
+					<%
+						if(!userRole.equals("stduent"))
+						{
+					%>
+							<button class="btn-info"></button>
+					<%
+						}
+					%>
 					<hr class="bottom-line">
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-6">
@@ -215,21 +223,26 @@
 			<div class="row">
 				<div class="header-section text-center">
 					<h2>作業</h2>
+					<%
+						if(!userRole.equals("student")){
+					%>
+						<button class="btn btn-primary" id="button_add_homework"
+							onclick="addHomework()">新增作業</button>
+					<%
+						} 
+					%>
 					<hr class="bottom-line">
 				</div>
 			</div>
 		</div>
 		<div class="container">
 			<%
-				/*For Loop*/
 				for (int i = 0; i < homeworkDatas.size(); i++) {
-					/*IF*/
 					if (i % 3 == 0) {
 			%>
 			<div class="row">
 				<%
 					}
-						/*IF*/
 				%>
 				<div class="col-md-4 col-sm-4">
 					<div class="price-table">
@@ -237,22 +250,22 @@
 						<div class="pricing-head">
 							<%
 								String viewArgs = "'" + homeworkDatas.get(i).id + "', '" + homeworkDatas.get(i).name + "', '"
-											+ homeworkDatas.get(i).deadline + "', '" + homeworkDatas.get(i).information + "', '"
-											+ homeworkDatas.get(i).link + "', '" + homeworkDatas.get(i).attach_file_name + "'";
+											+ homeworkDatas.get(i).deadline + "', " + homeworkDatas.get(i).delayDeadline + ", '"
+											+ homeworkDatas.get(i).information + "', '" + homeworkDatas.get(i).link + "', '"
+											+ homeworkDatas.get(i).attach_file_name + "', '" + homeworkDatas.get(i).UT_file_name + "'";
 							%>
 							<a href="#homeworks" id="button_view_homework"
-								onclick="viewHomework(  <%out.print(viewArgs);%>)"> <%
-								String homeworkName = homeworkDatas.get(i).name;
- 							out.print(homeworkName);
-							%>
+								onclick="viewHomework(<%out.print(viewArgs);%>)"> <%
+ 								out.print(homeworkDatas.get(i).name);
+ 							%>
 							</a> <br> <span>繳交期限<br> <%
 							String deadline = homeworkDatas.get(i).deadline;
 							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 							long nowTime = System.currentTimeMillis();
 							long deadlineTime= sdf.parse(deadline).getTime();
 							boolean delayDeadline = homeworkDatas.get(i).delayDeadline;
-							if(nowTime>deadlineTime && (!delayDeadline)){
-								%>
+							if(nowTime>deadlineTime){
+							%>
 								<font color="red">
 								<%out.print(deadline);%>
 								</font>
@@ -261,75 +274,90 @@
 							}else{
 								out.print(deadline);
 							}
+							%></span>
+							<%
+								if(userRole.equals("student")){
 							%>
-							</span>
-							<form role="form" action="HomeworkFileSubmitDownloadServlet"
-								method="post" enctype="multipart/form-data">
-								<%
-									int homeworkId = submitHomeworkDBHelper.getHomeworkFileId(homeworkDatas.get(i).id, userId);
-										String homeworkFileName = submitHomeworkDBHelper.getHomeworkFileName(homeworkId);
-								%>
-								<input type="hidden" name="homework_id"
-									value=<%out.print(homeworkId);%>>
-								<button type="submit" class="btn btn-default">
+								<form role="form" action="HomeworkFileSubmitDownloadServlet"
+									method="post" enctype="multipart/form-data">
 									<%
-										out.print(homeworkFileName);
+										int homeworkId = submitHomeworkDBHelper.getHomeworkFileId(homeworkDatas.get(i).id, userId);
+											String homeworkFileName = submitHomeworkDBHelper.getHomeworkFileName(homeworkId);
 									%>
-								</button>
-							</form>
+									<input type="hidden" name="homework_id"
+										value=<%out.print(homeworkId);%>>
+									<button type="submit" class="btn btn-default">
+										<%
+											out.print(homeworkFileName);
+										%>
+									</button>
+								</form>
+							<%
+								}
+							%>
 						</div>
 						<div class="price-in mart-15">
 							<%
-								String editDeleteArgs = homeworkDatas.get(i).id + ", '" + homeworkDatas.get(i).name + "', '"
+								if(userRole.equals("student")){
+									String editDeleteArgs = homeworkDatas.get(i).id + ", '" + homeworkDatas.get(i).name + "', '"
 											+ homeworkDatas.get(i).deadline + "', '" + homeworkDatas.get(i).information + "', '"
 											+ homeworkDatas.get(i).link + "'";
-								if(nowTime>deadlineTime && (!delayDeadline))
-								{
+									if(nowTime>deadlineTime && (!delayDeadline))
+									{
 							%>
-									<div class="btn btn-danger btn-block">
-										期限已過
-									</div>
+										<div class="btn btn-danger btn-block">
+											期限已過
+										</div>
 							<%
-								}
-								else
-								{
+									}
+									else{
 							%>
-							<form role="form" action="HomeworkFileSubmitUploadServlet"
-								method="post" enctype="multipart/form-data">
-								<input type="hidden" name="teacher_assignment_id"
-									value=<%out.print(homeworkDatas.get(i).id);%>> <input
-									type="hidden" name="student_id" value=<%out.print(userId);%>>
-								<input type="file" name="homework_file">
-								<button type="submit" class="btn btn-success btn-block">上傳</button>
-							</form>
+											<form role="form" action="HomeworkFileSubmitUploadServlet"
+												method="post" enctype="multipart/form-data">
+												<input type="hidden" name="teacher_assignment_id"
+												value=<%out.print(homeworkDatas.get(i).id);%>> <input
+												type="hidden" name="student_id" value=<%out.print(userId);%>>
+												<input type="file" name="homework_file">
+												<button type="submit" class="btn btn-success btn-block">上傳</button>
+											</form>
+							<%			
+									}
+								}
+								else{
+									String editDeleteArgs = homeworkDatas.get(i).id + ", '" + homeworkDatas.get(i).name + "', '"
+											+ homeworkDatas.get(i).deadline + "', " + homeworkDatas.get(i).delayDeadline + ", '"
+											+ homeworkDatas.get(i).information + "', '" + homeworkDatas.get(i).link + "', '"
+											+ homeworkDatas.get(i).attach_file_name + "', '" + homeworkDatas.get(i).UT_file_name + "'";
+							%>
+									<button class="btn btn-success btn-block" id="button_edit_homework"
+											onclick="editHomework(<%out.print(editDeleteArgs);%> )">編輯</button>
+									<button class="btn btn-danger btn-block" id="button_delete_homework"
+											onclick="deleteHomework(<%out.print(editDeleteArgs);%>)">刪除</button>
 							<%
 								}
 							%>
 							<form role="form" action="viewSubmitStatus.jsp" method="post">
 								<input type="hidden" name="teacher_assignment_id"
 									value=<%out.print(homeworkDatas.get(i).id);%>>
-								<button type="submit" class="btn btn-info btn-block">查看</button>
+								<button type="submit" class="btn btn-info btn-block">查看作業繳交狀態</button>
 							</form>
 						</div>
-
 					</div>
 				</div>
 				<%
-					/*IF*/
-						if ((i + 1) % 3 == 0) {
+					if ((i + 1) % 3 == 0) {
 				%>
 			</div>
 			<br>
 			<%
 				}
-					/*IF*/
+			%>
+			<%
 				}
-				/*For Loop*/
 			%>
 		</div>
 	</section>
 	<!--/ Homework-->
-
 	<!--Footer-->
 	<footer id="footer" class="footer">
 		<div class="container text-center">
@@ -352,14 +380,12 @@
 	<%@ include file="homeworkDeleteDialog.jsp"%>
 	<%@ include file="homeworkViewDialog.jsp"%>
 
-	<script src="js/jquery.min.js">
-</script>
+	<script src="js/jquery.min.js"></script>
 	<script src="js/jquery.easing.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/custom.js"></script>
 	<script src="contactform/contactform.js"></script>
 	<script src="homeworkEvent.js"></script>
-
 
 </body>
 

@@ -5,6 +5,8 @@ import java.sql.Blob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Map.Entry;
+import java.util.AbstractMap.SimpleEntry;
 
 public class SubmitHomeworkDBHelper {
 
@@ -36,9 +38,29 @@ public class SubmitHomeworkDBHelper {
 				submitHomeworkData.homework_file = resultSet.getBlob(COL_HOMEWORK_FILE);
 				result.add(submitHomeworkData);
 			}
-			System.out.println("Finish getting all data of submitted homeworks");
+			System.out.println("Finish getting all data of submitted homework");
 		} catch (Exception e) {
-			System.out.println("Can not get all data of submitted homeworks: " + e);
+			System.out.println("Can not get all data of submitted homework: " + e);
+		}
+		return result;
+	}
+
+	public ArrayList<Entry<String, Blob>> getHomeworkFiles(int teacherAssignmentId) {
+		String sql = "Select " + COL_HOMEWORK_FILE_NAME + ", " + COL_HOMEWORK_FILE + " From " + TABLE_NAME + " Where " + COL_TEACHER_ASSIGNMENT_ID + " = "
+				+ teacherAssignmentId;
+		ArrayList<Entry<String, Blob>> result = new ArrayList<Entry<String, Blob>>();
+		ResultSet resultSet;
+		try {
+			resultSet = dbConnector.statement.executeQuery(sql);
+			while (resultSet.next()) {
+				String fileName = resultSet.getString(COL_HOMEWORK_FILE_NAME);
+				Blob file = resultSet.getBlob(COL_HOMEWORK_FILE);
+				Entry<String, Blob> pair = new SimpleEntry<>(fileName, file);
+				result.add(pair);
+			}
+			System.out.println("Finish getting all files of submitted homework");
+		} catch (Exception e) {
+			System.out.println("Can not get all files of submitted homework: " + e);
 		}
 		return result;
 	}
@@ -159,6 +181,23 @@ public class SubmitHomeworkDBHelper {
 		}
 		return result;
 	}
+	
+	public ArrayList<String> getSubmittedStudentId(int teacherAssignmentId){
+		ArrayList<String> result = new ArrayList<String>();
+		ResultSet resultSet;
+		try {
+			String sql = "Select " + COL_STUDENT_ID + " From " + TABLE_NAME + " Where " + COL_TEACHER_ASSIGNMENT_ID + " = "
+					+ teacherAssignmentId;
+			resultSet = dbConnector.statement.executeQuery(sql);
+			while (resultSet.next()) {
+				result.add(resultSet.getString(COL_STUDENT_ID));
+			}
+			System.out.println("Finish getting the stduent id of submitted homeworks");
+		} catch (Exception e) {
+			System.out.println("Can not get the stduent id of submitted homeworks: " + e);
+		}
+		return result;
+	}
 
 	public void insertHomework(int teacherAssignmentId, String studentId, String submitDatetime,
 			String homeworkFileName, InputStream homeworkFile) {
@@ -190,9 +229,24 @@ public class SubmitHomeworkDBHelper {
 			ps.setInt(4, id);
 			ps.executeUpdate();
 		} catch (Exception ex) {
-			System.out.println("Update Submitted Homework " + ex);
+			System.out.println("Update Submitted Homework: " + ex);
 		}
 
+	}
+
+	public void updateScore(int assignmentId, String studentId, int score) {
+		String sql = "Update " + TABLE_NAME + " Set " + COL_SCORE + " = ? Where " + COL_TEACHER_ASSIGNMENT_ID
+				+ " = ? And " + COL_STUDENT_ID + " = ?";
+		try {
+			DatabaseConnector databaseConnector = new DatabaseConnector();
+			PreparedStatement ps = databaseConnector.connection.prepareStatement(sql);
+			ps.setInt(1, score);
+			ps.setInt(2, assignmentId);
+			ps.setString(3, studentId);
+			ps.executeUpdate();
+		} catch (Exception ex) {
+			System.out.println("Update Score: " + ex);
+		}
 	}
 
 	public void deleteHomework(int id) {
