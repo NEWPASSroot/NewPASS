@@ -118,7 +118,8 @@ public class HomeworkUTExecuteServlet extends HttpServlet {
 					dir.mkdirs();
 					String submittedHWName = submitHomeworkDBHelper.getHomeworkFileName(id, studentId);
 					String submittedHWSource = dirPath + submittedHWName;
-					String submittedHWTarget = studentDirPath + "main.py";
+					submittedHWName = submittedHWName.substring(submittedHWName.indexOf('_')+1);
+					String submittedHWTarget = studentDirPath + submittedHWName;
 					File source = new File(submittedHWSource);
 					File target = new File(submittedHWTarget);
 					if (source.renameTo(target)) {

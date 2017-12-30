@@ -43,7 +43,7 @@ public class HomeworkDownloadServlet extends HttpServlet {
 			while ((bytesRead = inputStream.read(bytes)) != -1) {
 				response.getOutputStream().write(bytes, 0, bytesRead);
 			}
-			if(contentType.equals("application/zip")) {
+			if(contentType != null && contentType.equals("application/zip")) {
 				String dirPath = System.getProperty("user.home")+"/Downloads/";
 				String filePath = dirPath+homeworkFileName;
 				File file = new File(filePath);

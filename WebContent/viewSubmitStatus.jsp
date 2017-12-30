@@ -340,7 +340,42 @@
 							}
 						%>
 						<td><%=submitHWTime%></td>
-						<td><%=HWFileName%></td>
+						<%
+							if(userRole.equals("student"))
+							{
+						%>
+								<td><%=HWFileName%></td>
+						<%
+							}
+							else
+							{
+						%>
+								<td><form role="form" action="HomeworkFileSubmitDownloadServlet"
+								method="post" enctype="multipart/form-data">
+								<%
+									int homeworkId = submitHomeworkDBHelper.getHomeworkFileId(assignmentId, studentId);
+										String homeworkFileName = submitHomeworkDBHelper.getHomeworkFileName(homeworkId);
+								%>
+								<input type="hidden" name="homework_id"
+									value=<%out.print(homeworkId);%>>
+									<%
+										if(homeworkFileName == null || homeworkFileName.equals("")){
+											out.print("null");
+										}
+										else{
+									%>
+											<button type="submit" class="btn btn-default">
+									<%	
+											out.print(homeworkFileName.substring(homeworkFileName.indexOf('_')+1));
+									%>
+											</button>
+									<%
+										}
+									%>
+							</form></td>
+						<%
+							}
+						%>
 					</tr>
 
 					<%
@@ -390,15 +425,26 @@
 								%>
 								<input type="hidden" name="homework_id"
 									value=<%out.print(homeworkId);%>>
-								<button type="submit" class="btn btn-default">
 									<%
-										out.print(homeworkFileName);
+										if(homeworkFileName == null || homeworkFileName.equals("")){
+											out.print("null");
+										}
+										else{
 									%>
-								</button>
+											<button type="submit" class="btn btn-default">
+									<%	
+											out.print(homeworkFileName.substring(homeworkFileName.indexOf('_')+1));
+									%>
+											</button>
+									<%
+										}
+									%>
 							</form></td>
+						<%
+							}
+						%>
 					</tr>
 					<%
-							}
 						}
 					}
 				}

@@ -178,7 +178,7 @@
 						String TAId = TAInfo[0];
 						String TAName = TAInfo[1];
 						String TAEmail = TAInfo[2];
-						if(!userRole.equals("stduent"))
+						if(!userRole.equals("student") && !userRole.equals("TA"))
 						{
 							if(TAId==null || TAId.equals(""))
 							{
@@ -310,11 +310,22 @@
 									%>
 									<input type="hidden" name="homework_id"
 										value=<%out.print(homeworkId);%>>
-									<button type="submit" class="btn btn-default">
-										<%
-											out.print(homeworkFileName);
-										%>
-									</button>
+									<%
+										if(homeworkFileName == null || homeworkFileName.equals("")){
+									%>
+											<font color="red">未繳交作業</font>
+									<%
+										}
+										else{
+									%>
+											<button type="submit" class="btn btn-default">
+									<%	
+											out.print(homeworkFileName.substring(homeworkFileName.indexOf('_')+1));
+									%>
+											</button>
+									<%
+										}
+									%>
 								</form>
 							<%
 								}
@@ -341,7 +352,7 @@
 												<input type="hidden" name="teacher_assignment_id"
 												value=<%out.print(homeworkDatas.get(i).id);%>> <input
 												type="hidden" name="student_id" value=<%out.print(userId);%>>
-												<input type="file" name="homework_file">
+												<input type="file" name="homework_file" required>
 												<button type="submit" class="btn btn-success btn-block">上傳</button>
 											</form>
 							<%			
