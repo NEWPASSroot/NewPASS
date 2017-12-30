@@ -38,9 +38,31 @@ public class UserDBHelper {
 		return result;
 	}
 
+	public ArrayList<String[]> getSpecifyData() {
+		String sql = "Select " + COL_USER_ID + ", " + COL_USER_NAME + ", " + COL_USER_EMAIL + " From " + TABLE_NAME
+				+ " Where " + COL_USER_ROLE + " = 'student' ";
+		ArrayList<String[]> result = new ArrayList<String[]>();
+		ResultSet resultSet;
+		try {
+			resultSet = dbConnector.statement.executeQuery(sql);
+			while (resultSet.next()) {
+				String[] data = new String[3];
+				data[0] = resultSet.getString(COL_USER_ID);
+				data[1] = resultSet.getString(COL_USER_NAME);
+				data[2] = resultSet.getString(COL_USER_EMAIL);
+				result.add(data);
+			}
+			System.out.println("Finish getting specify data of users");
+		} catch (Exception e) {
+			System.out.println("Can not get specify data of users: " + e);
+		}
+		return result;
+	}
+
 	public String[] login(String userId, String userPassword) {
-		String sql = "Select " + COL_USER_ID + ", " + COL_USER_NAME + ", " + COL_USER_ROLE + ", " + COL_USER_PASSWORD + " From " + TABLE_NAME
-				+ " Where " + COL_USER_ID + " = '" + userId + "' And " + COL_USER_PASSWORD + " = '" + userPassword + "'";
+		String sql = "Select " + COL_USER_ID + ", " + COL_USER_NAME + ", " + COL_USER_ROLE + ", " + COL_USER_PASSWORD
+				+ " From " + TABLE_NAME + " Where " + COL_USER_ID + " = '" + userId + "' And " + COL_USER_PASSWORD
+				+ " = '" + userPassword + "'";
 		ResultSet resultSet;
 		String userName = "", userRole = "";
 		try {
@@ -58,7 +80,7 @@ public class UserDBHelper {
 		} catch (Exception e) {
 			System.out.println("The sql program for login has the error: " + e);
 		}
-		String[] result = {userName, userRole};
+		String[] result = { userName, userRole };
 		return result;
 	}
 
@@ -107,10 +129,10 @@ public class UserDBHelper {
 			System.out.println("Delete User Error: " + ex);
 		}
 	}
-	
-	public User getPersonalInfo(String userId){
-		String sql = "Select "+COL_ID + ", " +COL_USER_NAME +  ", " + COL_USER_EMAIL + " From " + TABLE_NAME
-				+ " Where " + COL_USER_ID+ " = " + userId;
+
+	public User getPersonalInfo(String userId) {
+		String sql = "Select " + COL_ID + ", " + COL_USER_NAME + ", " + COL_USER_EMAIL + " From " + TABLE_NAME
+				+ " Where " + COL_USER_ID + " = " + userId;
 		ResultSet resultSet;
 		User user = new User();
 		try {
@@ -125,9 +147,9 @@ public class UserDBHelper {
 		} catch (Exception e) {
 			System.out.println("Can not get personal information: " + e);
 		}
-		return user ;
+		return user;
 	}
-	
+
 	public ArrayList<User> getAllStudents() {
 		String sql = "Select * From " + TABLE_NAME + " Where " + COL_USER_ROLE + " = 'student' ";
 		ResultSet resultSet;
@@ -144,13 +166,47 @@ public class UserDBHelper {
 				user.email = resultSet.getString(COL_USER_EMAIL);
 				result.add(user);
 			}
-			System.out.println("Finish getting all data of users");
+			System.out.println("Finish getting all data of students");
 		} catch (Exception e) {
-			System.out.println("Can not get all data of users: " + e);
+			System.out.println("Can not get all data of students: " + e);
+		}
+		return result;
+	}
+
+	public ArrayList<String> getAllStudentId() {
+		String sql = "Select " + COL_USER_ID + " From " + TABLE_NAME + " Where " + COL_USER_ROLE + " = 'student' Or " + COL_USER_ROLE + " = 'TA' ";
+		ResultSet resultSet;
+		ArrayList<String> result = new ArrayList<String>();
+		try {
+			resultSet = dbConnector.statement.executeQuery(sql);
+			while (resultSet.next()) {
+				result.add(resultSet.getString(COL_USER_ID));
+			}
+			System.out.println("Finish getting all Id of students");
+		} catch (Exception e) {
+			System.out.println("Can not get all Id of students: " + e);
 		}
 		return result;
 	}
 	
+	public String[] getTA() {
+		String sql = "Select " + COL_USER_ID + ", " + COL_USER_NAME + ", " + COL_USER_EMAIL + " From " + TABLE_NAME + " Where " + COL_USER_ROLE + " = 'TA' ";
+		ResultSet resultSet;
+		String[] result = new String[3]; 
+		try {
+			resultSet = dbConnector.statement.executeQuery(sql);
+			if (resultSet.next()) {
+				result[0] = resultSet.getString(COL_USER_ID);
+				result[1] = resultSet.getString(COL_USER_NAME);
+				result[2] = resultSet.getString(COL_USER_EMAIL);
+			}
+			System.out.println("Finish getting the information of TA");
+		} catch (Exception e) {
+			System.out.println("Can not get the information of TA: " + e);
+		}
+		return result;
+	}
+
 	public void editEmail(String userId, String userEmail) {
 		String sql = "Update " + TABLE_NAME + " Set " + COL_USER_EMAIL + " = ? Where " + COL_USER_ID + " = ? ";
 		try {
@@ -164,7 +220,7 @@ public class UserDBHelper {
 			System.out.println("Update Email Error: " + ex);
 		}
 	}
-	
+
 	public void editPassword(String userId, String userPassword) {
 		String sql = "Update " + TABLE_NAME + " Set " + COL_USER_PASSWORD + " = ? Where " + COL_USER_ID + " = ? ";
 		try {
@@ -172,10 +228,30 @@ public class UserDBHelper {
 			ps.setString(1, userPassword);
 			ps.setString(2, userId);
 			ps.executeUpdate();
-		}
-
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			System.out.println("Update Password Error: " + ex);
+		}
+	}
+
+	public void addTA(String userId) {
+		String sql = "Update " + TABLE_NAME + " Set " + COL_USER_ROLE + " = 'TA' Where " + COL_USER_ID + " = ? ";
+		try {
+			PreparedStatement ps = dbConnector.connection.prepareStatement(sql);
+			ps.setString(1, userId);
+			ps.executeUpdate();
+		} catch (Exception ex) {
+			System.out.println("Add TA Error: " + ex);
+		}
+	}
+
+	public void deleteTA(String userId) {
+		String sql = "Update " + TABLE_NAME + " Set " + COL_USER_ROLE + " = 'student' Where " + COL_USER_ID + " = ? ";
+		try {
+			PreparedStatement ps = dbConnector.connection.prepareStatement(sql);
+			ps.setString(1, userId);
+			ps.executeUpdate();
+		} catch (Exception ex) {
+			System.out.println("Delete TA Error: " + ex);
 		}
 	}
 }

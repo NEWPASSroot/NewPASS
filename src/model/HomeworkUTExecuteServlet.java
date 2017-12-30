@@ -137,7 +137,7 @@ public class HomeworkUTExecuteServlet extends HttpServlet {
 					}
 					File test = new File(testTargetPath);
 					try {
-						while(!test.exists()) {
+						while (!test.exists()) {
 							System.out.println("Catching the UT File...");
 						}
 						unzip.unzip(testTargetPath, studentDirPath);
@@ -147,8 +147,8 @@ public class HomeworkUTExecuteServlet extends HttpServlet {
 						e.printStackTrace();
 					}
 					boolean isZip = submittedHWName.contains(".zip");
-					if(isZip) {
-						while(!target.exists()) {
+					if (isZip) {
+						while (!target.exists()) {
 							System.out.println("Catching the submitted Homework Zip");
 						}
 						try {
@@ -158,7 +158,7 @@ public class HomeworkUTExecuteServlet extends HttpServlet {
 							e.printStackTrace();
 						}
 					}
-					
+
 				}
 				String score = "";
 				try {
@@ -167,32 +167,72 @@ public class HomeworkUTExecuteServlet extends HttpServlet {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				System.out.println(score);
+				int p1 = 0, p2 = 0;
+				ArrayList<Entry<String, Integer>> scoreDatas = new ArrayList<Entry<String, Integer>>();
+				String idStr = "", scoreStr = "";
+				for (int i = 0; i < score.length(); i++) {
+					if (score.charAt(i) == '"') {
+						p1 = i + 1;
+						for (int j = i + 1; j < score.length(); j++) {
+							if (score.charAt(j) == '"') {
+								p2 = j;
+								idStr = score.substring(p1, p2);
+								i = j;
+								break;
+							}
+						}
+					} else if (score.charAt(i) == ':') {
+						p1 = i + 1;
+						for (int j = i + 1; j < score.length(); j++) {
+							if (score.charAt(j) == ',' || score.charAt(j) == '}') {
+								p2 = j;
+								scoreStr = score.substring(p1, p2);
+								Entry<String, Integer> scoreEntry = new SimpleEntry<String, Integer>(idStr,
+										(int) Double.parseDouble(scoreStr));
+								scoreDatas.add(scoreEntry);
+								i = j;
+								break;
+							}
+						}
+					}
+				}
+				for (Entry<String, Integer> scoreData : scoreDatas) {
+					System.out.println(scoreData.getKey() + ": " + scoreData.getValue());
+					submitHomeworkDBHelper.updateScore(id, scoreData.getKey(), scoreData.getValue());
+				}
+				File deleteZip = new File(filePath);
+				File deleteDir = new File(dirPath);
+				if (deleteZip.delete()) {
+					System.out.println(deleteZip.getName() + " is deleted!");
+				} else {
+					System.out.println(deleteZip.getName() + " deleted fail!");
+				}
+				deleteDir(deleteDir);
 			}
 		});
 		t.start();
 	}
-	
+
 	private static String post(String path, ArrayList<String> hwFolderList) throws Exception {
-		if(path==null || path.equals("")) {
+		if (path == null || path.equals("")) {
 			return "";
 		}
-		if(hwFolderList == null || hwFolderList.isEmpty()) {
+		if (hwFolderList == null || hwFolderList.isEmpty()) {
 			return "";
 		}
 		String url = "http://127.0.0.1:5000/python";
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		String folderList = hwFolderList.get(0);
-		for(int i=1; i<hwFolderList.size(); i++) {
-			folderList+=";"+hwFolderList.get(i);
+		for (int i = 1; i < hwFolderList.size(); i++) {
+			folderList += ";" + hwFolderList.get(i);
 		}
-		if(path.charAt(path.length()-1)=='\\' || path.charAt(path.length()-1)=='/') {
-			path = path.substring(0, path.length()-1);
+		if (path.charAt(path.length() - 1) == '\\' || path.charAt(path.length() - 1) == '/') {
+			path = path.substring(0, path.length() - 1);
 		}
-		String data ="path="+path+"&folderList="+folderList;
+		String data = "path=" + path + "&folderList=" + folderList;
 		con.setRequestMethod("POST");
-        con.setDoOutput(true);
+		con.setDoOutput(true);
 		con.setDoInput(true);
 		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
 		wr.writeBytes(data);
@@ -200,13 +240,24 @@ public class HomeworkUTExecuteServlet extends HttpServlet {
 		wr.close();
 		int responseCode = con.getResponseCode();
 		System.out.println(responseCode);
-		
-		BufferedReader in =new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		String inputLine;
 		StringBuffer response = new StringBuffer();
-		while((inputLine = in.readLine())!=null) {
+		while ((inputLine = in.readLine()) != null) {
 			response.append(inputLine);
 		}
 		return response.toString();
+	}
+
+	void deleteDir(File file) {
+		File[] lists = file.listFiles();
+		if (lists != null) {
+			for (File l : lists) {
+				deleteDir(l);
+			}
+		}
+		file.delete();
+		System.out.println("Delete " + file.getName());
 	}
 }

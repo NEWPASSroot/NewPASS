@@ -37,7 +37,7 @@
 <body>
 
 	<%
-		String userId = "", userRole = "";
+		String userId = "", userName = "", userRole = "";
 		if (session.getAttribute("userId") == null) {
 			response.sendRedirect("login.jsp");
 		} else {
@@ -46,6 +46,7 @@
 			userId = session.getAttribute("userId").toString();
 			userRole = session.getAttribute("userRole").toString();
 		}
+		UserDBHelper userDBHelper = new UserDBHelper();
 		HomeworkDBHelper homeworkDBHelper = new HomeworkDBHelper();
 		SubmitHomeworkDBHelper submitHomeworkDBHelper = new SubmitHomeworkDBHelper();
 		ArrayList<HomeworkData> homeworkDatas = homeworkDBHelper.getAllData();
@@ -62,6 +63,16 @@
 						class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="index.jsp">PASS</a>
+				<%
+					if(session.getAttribute("userName")!=null && session.getAttribute("userRole")!=null)
+					{
+						userName = session.getAttribute("userName").toString();
+						userRole = session.getAttribute("userRole").toString();
+				%>
+						<span><%out.print(userName+" 您好,您目前登入的身分是"+userRole);%></span>
+				<%
+					}
+				%>
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav navbar-right">
@@ -163,11 +174,24 @@
 				<div class="header-section text-center">
 					<h2>老師和助教的資訊</h2>
 					<%
+						String[] TAInfo = userDBHelper.getTA();
+						String TAId = TAInfo[0];
+						String TAName = TAInfo[1];
+						String TAEmail = TAInfo[2];
 						if(!userRole.equals("stduent"))
 						{
+							if(TAId==null || TAId.equals(""))
+							{
 					%>
-							<button class="btn-info"></button>
+								<button class="btn btn-info" onclick="addTA()">指派助教</button>
 					<%
+							}
+							else{
+								String deleteTAArgs = "'" + TAId + "', '" + TAName + "', '" + TAEmail + "'";
+					%>
+								<button class="btn btn-danger" onclick="deleteTA(<%=deleteTAArgs%>)">刪除助教</button>
+					<%
+							}
 						}
 					%>
 					<hr class="bottom-line">
@@ -201,14 +225,14 @@
 							</div>
 						</div>
 						<div class="pm-staff-profile-details text-center">
-							<p class="pm-staff-profile-name">里包恩</p>
+							<p class="pm-staff-profile-name"><%=TAName%></p>
 							<p class="pm-staff-profile-title">助教</p>
 
 							<p class="pm-staff-profile-bio">
 							<p>Office: Technology and Research Building 1321</p>
 							<p>Office Hours: Thu 10:10-12:00 and Fri 10:10-12:00, or by
 								appointment</p>
-							<p>Email: ribbon@csie.ntut.edu.tw</p>
+							<p>Email: <%=TAEmail%></p>
 							<p>Phone: 02-2771-2171 ext. 1321</p>
 						</div>
 					</div>
@@ -379,6 +403,8 @@
 	<%@ include file="homeworkEditDialog.jsp"%>
 	<%@ include file="homeworkDeleteDialog.jsp"%>
 	<%@ include file="homeworkViewDialog.jsp"%>
+	<%@ include file="TAAddDialog.jsp"%>
+	<%@ include file="TADeleteDialog.jsp"%>
 
 	<script src="js/jquery.min.js"></script>
 	<script src="js/jquery.easing.min.js"></script>
@@ -386,6 +412,7 @@
 	<script src="js/custom.js"></script>
 	<script src="contactform/contactform.js"></script>
 	<script src="homeworkEvent.js"></script>
+	<script src="TAEvent.js"></script>
 
 </body>
 

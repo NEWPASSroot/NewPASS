@@ -35,7 +35,7 @@
 <body>
 
 	<%
-		String userId = "", userRole = "";
+		String userId = "", userName = "", userRole = "";
 		if (session.getAttribute("userId") == null) {
 			response.sendRedirect("login.jsp");
 		} else {
@@ -172,6 +172,16 @@
 						class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="index.jsp">PASS</a>
+				<%
+					if(session.getAttribute("userName")!=null && session.getAttribute("userRole")!=null)
+					{
+						userName = session.getAttribute("userName").toString();
+						userRole = session.getAttribute("userRole").toString();
+				%>
+						<span><%out.print(userName+" 您好,您目前登入的身分是"+userRole);%></span>
+				<%
+					}
+				%>
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav navbar-right">
@@ -190,7 +200,7 @@
 					<div class="banner-text text-center">
 						<div class="text-border">
 							<h2 class="text-dec">
-								<a href="python.jsp"> <%=homeworkName%>
+								<a href="python.jsp#homeworks"> <%=homeworkName%>
 								</a>
 							</h2>
 						</div>
@@ -206,7 +216,7 @@
 								interfaces and figures that allow users to view the status and
 								summary of programming assignment submission.</p>
 						</div>
-						<a href="#courses" class="mouse-hover">
+						<a href="#submitStatus" class="mouse-hover">
 							<div class="mouse"></div>
 						</a>
 					</div>
