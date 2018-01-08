@@ -154,7 +154,7 @@
 			// Instantiate and draw our chart, passing in some options.
 			var chart = new google.visualization.PieChart(document
 					.getElementById('chart_div'));
-			var chart3 = new google.charts.Bar(document
+			var chart3 = new google.visualization.BarChart(document
 					.getElementById('chart_div3'));
 
 			chart.draw(data, options);
