@@ -44,13 +44,13 @@
 						<br>
 						<div class="form-group">
 							<label for="add_homework_information"> 作業描述</label>
-							<textarea class="form-control" id="add_homework_information"
-								name="homework_information" required="required"></textarea>
+							<input class="form-control" id="add_homework_information"
+								name="homework_information" required="required">
 						</div>
 						<div class="form-group">
 							<label for="add_homework_link"> 附件連結</label>
-							<textarea class="form-control" id="add_homework_link"
-								name="homework_link"></textarea>
+							<input class="form-control" id="add_homework_link"
+								name="homework_link">
 						</div>
 						<div class="form-group">
 							<label for="add_homework_attach_file"> 附件</label> <input

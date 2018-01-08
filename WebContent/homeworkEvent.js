@@ -57,16 +57,19 @@ function viewHomework(id, name, deadline, delayDeadline, information, link, atta
 	} else {
 		document.getElementById("view_homework_attach_file").innerHTML = "";
 	}
-	if (UTFileName) {
-		document.getElementById("view_homework_UT_file").innerHTML = "<label for=\"view_homework_UT_file\" style=\"color: #3399FF\">作業批改</label>"
-				+ "<form role=\"form\" action=\"HomeworkUTFileExecuteServlet\" method=\"post\" enctype=\"multipart/form-data\">"
-				+ "<input type=\"hidden\" class=\"form-control\" name = \"homework_id\" value = "
-				+ id
-				+ " readonly>"
-				+ "<button type=\"submit\" class=\"btn btn-default\">"
-				+ UTFileName + "</button>" + "</form>";
-	} else {
-		document.getElementById("view_homework_UT_file").innerHTML = "";
+	var UTFile = document.getElementById("view_homework_UT_file");
+	if(UTFile){
+		if (UTFileName) {
+			UTFile.innerHTML = "<label for=\"view_homework_UT_file\" style=\"color: #3399FF\">作業批改</label>"
+					+ "<form role=\"form\" action=\"HomeworkUTFileExecuteServlet\" method=\"post\" enctype=\"multipart/form-data\">"
+					+ "<input type=\"hidden\" class=\"form-control\" name = \"homework_id\" value = "
+					+ id
+					+ " readonly>"
+					+ "<button type=\"submit\" class=\"btn btn-default\">"
+					+ UTFileName + "</button>" + "</form>";
+		} else {
+			UTFile.innerHTML = "";
+		}
 	}
 }
 

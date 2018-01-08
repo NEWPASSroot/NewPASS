@@ -8,7 +8,12 @@
 <title>View Homework</title>
 </head>
 <body>
-
+	<%
+		String role = "";
+		if(session.getAttribute("userRole")!=null){
+			role = session.getAttribute("userRole").toString();
+		}
+	%>
 	<div class="modal fade" id="viewHomeworkModal" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
@@ -44,13 +49,15 @@
 						<label for="view_homework_information" style="color: #3399FF">作業描述</label>
 						<p id="view_homework_information"></p>
 					</div>
-					<div class="container-fluid">
-						<label for="view_homework_information" style="color: #3399FF">分數</label>
-						<p>80</p>
-					</div>
 					<div class="container-fluid" id="view_homework_link"></div>
 					<div class="container-fluid" id="view_homework_attach_file"></div>
-					<div class="container-fluid" id="view_homework_UT_file"></div>
+					<%
+						if(!role.equals("student")){
+					%>
+						<div class="container-fluid" id="view_homework_UT_file"></div>
+					<%
+						}
+					%>
 					<br>
 					<button type="submit" class="btn btn-danger btn-block"
 						data-dismiss="modal">關閉</button>

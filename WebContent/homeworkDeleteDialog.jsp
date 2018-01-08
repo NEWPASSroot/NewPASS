@@ -50,13 +50,13 @@
 						<br>
 						<div class="form-group">
 							<label for="delete_homework_information"> 作業描述</label>
-							<textarea class="form-control" id="delete_homework_information"
-								name="homework_information" disabled></textarea>
+							<input class="form-control" id="delete_homework_information"
+								name="homework_information" disabled>
 						</div>
 						<div class="form-group">
 							<label for="delete_homework_link"> 附件連結</label>
-							<textarea class="form-control" id="delete_homework_link"
-								name="homework_link" disabled></textarea>
+							<input class="form-control" id="delete_homework_link"
+								name="homework_link" disabled>
 						</div>
 						<div class="form-group">
 							<label for="delete_homework_attach_file"> 附件</label> <input

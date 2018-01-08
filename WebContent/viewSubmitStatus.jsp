@@ -257,6 +257,9 @@
 							String submitHWTime = submitHomeworkDBHelper.getSubmitHomeworkTime(assignmentId, studentId);
 							String deadline = homeworkDBHelper.getDeadline(assignmentId);
 							String HWFileName = submitHomeworkDBHelper.getHomeworkFileName(assignmentId, studentId);
+							if(HWFileName!=null && !HWFileName.equals("")){
+								HWFileName = HWFileName.substring(HWFileName.indexOf('_')+1);
+							}
 							if (submitHWTime == null || submitHWTime.equals("")) {
 					%>
 					<tr class="danger">
@@ -365,9 +368,7 @@
 										else{
 									%>
 											<button type="submit" class="btn btn-default">
-									<%	
-											out.print(homeworkFileName.substring(homeworkFileName.indexOf('_')+1));
-									%>
+												<%=HWFileName%>
 											</button>
 									<%
 										}
@@ -432,9 +433,7 @@
 										else{
 									%>
 											<button type="submit" class="btn btn-default">
-									<%	
-											out.print(homeworkFileName.substring(homeworkFileName.indexOf('_')+1));
-									%>
+												<%=HWFileName%>
 											</button>
 									<%
 										}
@@ -486,20 +485,7 @@
 
 	<!--Footer-->
 	<footer id="footer" class="footer">
-		<div class="container text-center">
-
-			<!-- End newsletter-form -->
-			Â©2016 Mentor Theme. All rights reserved
-			<div class="credits">
-				<!--
-          All the links in the footer should remain intact.
-          You can delete the links only if you purchased the pro version.
-          Licensing information: https://bootstrapmade.com/license/
-          Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Mentor
-        -->
-				Designed by <a href="https://bootstrapmade.com/">BootstrapMade.com</a>
-			</div>
-		</div>
+		
 	</footer>
 	<!--/ Footer-->
 
